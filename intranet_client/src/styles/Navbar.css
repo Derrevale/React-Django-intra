@@ -1,0 +1,30 @@
+.header_logo {
+    width: 100%;
+    position: relative;
+    z-index: 99;
+    animation: spFadeIn 0.5s;
+}
+
+.header_menu {
+    width: 100%;
+
+    height: 100%;
+    border-bottom: solid;
+    border-bottom-color: rgb(17, 157, 174);
+}
+
+.header_menumenu > .sp-column {
+    height: 100%;
+}
+
+.logo-image {
+    height: 70px;
+}
+
+.sp-megamenu-parent>li>a, .sp-megamenu-parent>li>span {
+    display: inline-block;
+    padding: 0 15px;
+    line-height: 600%;
+    font-size: 14px;
+    margin: 0;
+}
