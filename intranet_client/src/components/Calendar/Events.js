@@ -4,11 +4,10 @@ const getEvents = async () => {
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
-
     const events = data.map((event) => ({
       id: event.id,
       title: event.title,
-      start: new Date(`${event.start_datetime}Z`),
+      start: event.start_datetime,
       end: new Date(`${event.start_datetime}Z`),
       allDay: false,
       description: event.description,

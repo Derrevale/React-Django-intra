@@ -21,6 +21,7 @@ class MyCalendar extends Component {
   render() {
     return (
       <div className="Calendar">
+        {console.log(this.state.events)}
         <Calendar
           localizer={localizer}
           defaultDate={new Date()}
