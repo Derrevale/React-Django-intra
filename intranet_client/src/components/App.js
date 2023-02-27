@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import Events from "./Event";
 import Topbar from "./Topbar";
-import MyCalendar from "./Calendar";
+import MyCalendar from "./Calendar/Calendar";
 
 import {createBrowserRouter, createRoutesFromElements, Route, Link, Outlet, RouterProvider, useParams} from "react-router-dom";
 import Event from "./Event";

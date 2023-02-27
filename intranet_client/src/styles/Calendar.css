@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.Calendar{
+  padding: 20px;
+
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
