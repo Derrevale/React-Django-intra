@@ -10,7 +10,6 @@ FREQUENCY_CHOICES = [
     (YEARLY, 'yearly'),
 ]
 
-
 class Calendar(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -22,12 +21,8 @@ class Calendar(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    start_datetime = models.DateTimeField(null=True)
-
+    Debut = models.DateTimeField(null=True, default=None)
+    Fin = models.DateTimeField(null=True, default=None)
     location = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey(Calendar, on_delete=models.CASCADE)
@@ -50,6 +45,6 @@ class Event(models.Model):
             (3, 'DAILY'),
         ]
         self.rrule = "FREQ={};DTSTART={};INTERVAL={};COUNT={}".format(
-            choice[self.frequency][1], self.start_date.strftime("%Y%m%dT%H%M%S"), self.interval, self.count
+            choice[self.frequency][1], self.Debut.strftime("%Y%m%dT%H%M%S"), self.interval, self.count
         )
         super().save(*args, **kwargs)

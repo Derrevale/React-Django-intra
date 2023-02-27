@@ -7,14 +7,13 @@ const getEvents = async () => {
     const events = data.map((event) => ({
       id: event.id,
       title: event.title,
-      start: event.start_datetime,
-      end: new Date(`${event.start_datetime}Z`),
+      start: event.Debut,
+      end: event.Fin,
       allDay: false,
       description: event.description,
       location: event.location,
       category: event.category,
     }));
-
     return events;
   } catch (error) {
     console.error(error);
