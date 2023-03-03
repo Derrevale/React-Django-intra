@@ -13,9 +13,9 @@ const EventForm = () => {
     const [category, setCategory] = useState('');
     const [formCompleted, setFormCompleted] = useState(false);
     const [recurrency, setRecurrence] = useState(false);
-    const [frequency, setFrequency] = useState('');
-    const [count, setCount] = useState('');
-    const [interval, setInterval] = useState('');
+    const [frequency, setFrequency] = useState('3');
+    const [count, setCount] = useState('1');
+    const [interval, setInterval] = useState('1');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -157,9 +157,20 @@ const EventForm = () => {
                     <div className="form-col">
                         <label className="form-label">
                             Fréquence :
-                            <input className="form-input" type="text" value={frequency}
-                                   onChange={(e) => setFrequency(e.target.value)}/>
+                            <select
+                                className="form-select"
+                                value={frequency}
+                                onChange={(e) => setFrequency(e.target.value)}
+                                title="Sélectionnez le calendrier de l'événement"
+                            >
+                                <option value="">Sélectionnez un calendrier</option>
+                                <option value="3">Quotidient</option>
+                                <option value="2">Hebdomadaire</option>
+                                <option value="1">Mensuel</option>
+                                <option value="0">Annuel</option>
+                            </select>
                         </label>
+
                     </div>
                     <div className="form-col">
                         <label className="form-label">
