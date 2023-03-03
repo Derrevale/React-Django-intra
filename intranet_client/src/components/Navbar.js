@@ -2,7 +2,6 @@ import '../styles/Navbar.css'
 import '../styles/bootstrap.min.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome, faCalendar, faFile, faBook, faIdBadge, faImages, faSearch} from "@fortawesome/free-solid-svg-icons";
-import {faFacebook, faYoutube, faLinkedin} from "@fortawesome/free-brands-svg-icons";
 
 function Navbar() {
     return <header id="banner_header">
@@ -19,7 +18,7 @@ function Navbar() {
                                          alt="Intranet"
                                          data-size="auto"
                                          srcSet="https://intra.silva-medical.be/images/silva-intranet.png 1x"
-                                         src="ArticleList"></img>
+                                         src="src/components/Blog/ArticleList"></img>
                                 </a>
                             </div>
                         </div>
@@ -36,7 +35,7 @@ function Navbar() {
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
-                                        <a href="/events">
+                                        <a href="/Calendar">
                                             <FontAwesomeIcon icon={faCalendar} className="fa-facebook"></FontAwesomeIcon> Garde
                                         </a>
                                     </li>

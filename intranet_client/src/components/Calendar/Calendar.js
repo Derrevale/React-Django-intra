@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import 'moment/locale/fr'; // Importe les fichiers de localisation français de Moment.js
 
-import "../../styles/Calendar.css";
+import "../../styles/Calendar/Calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import getEvents from "./Events";
+
+moment.locale('fr'); // Définit la langue de Moment.js sur français
 
 const localizer = momentLocalizer(moment);
 

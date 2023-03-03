@@ -1,13 +1,20 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./Navbar";
-import Events from "./Event";
 import Topbar from "./Topbar";
 import MyCalendar from "./Calendar/Calendar";
 
-import {createBrowserRouter, createRoutesFromElements, Route, Link, Outlet, RouterProvider, useParams} from "react-router-dom";
-import Event from "./Event";
-import ArticleList from "./ArticleList";
-import Article from "./Article";
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+    Link,
+    Outlet,
+    RouterProvider,
+    useParams
+} from "react-router-dom";
+import ArticleList from "./Blog/ArticleList";
+import Article from "./Blog/Article";
+import AddEventForm from "./Formulaire/EventForm";
 
 function App() {
 
@@ -15,8 +22,8 @@ function App() {
         createRoutesFromElements(
             <Route path="/" element={<Root/>}>
                 <Route index element={<ArticleList/>}/>
-                <Route path="/events" element={<Events/>}/>
                 <Route path="/calendar" element={<MyCalendar/>}/>
+                <Route path="/eventform" element={<AddEventForm/>}/>
                 <Route path="/articlelist" element={<ArticleList/>}/>
                 <Route path="/articles/:id" element={<Article/>}/>
                 <Route element={<Navbar/>}/>
@@ -38,7 +45,7 @@ const Root = () => {
     return (
         <>
 
-            <div>
+            <div className="container">
                 <Outlet/>
             </div>
         </>
