@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "moment": "^2.29.4",
+    "react-quill": "^2.0.0",
     "rrule": "^2.7.2"
   }
 }
