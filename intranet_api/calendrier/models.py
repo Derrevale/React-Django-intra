@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from dateutil.rrule import *
 from dateutil.rrule import DAILY, WEEKLY, MONTHLY, YEARLY
@@ -24,7 +25,7 @@ class Event(models.Model):
     Debut = models.DateTimeField(null=True, default=None)
     Fin = models.DateTimeField(null=True, default=None)
     location = models.CharField(max_length=255)
-    description = models.TextField()
+    description = RichTextField(null=True)
     category = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
