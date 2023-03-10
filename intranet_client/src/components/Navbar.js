@@ -31,32 +31,65 @@ function Navbar() {
                                 <ul className="sp-megamenu-parent menu-animation-fade-up d-none d-lg-block">
                                     <li className="sp-menu-item">
                                         <a href="/">
-                                            <FontAwesomeIcon icon={faHome} className="fa-facebook"></FontAwesomeIcon> Home
+                                            <FontAwesomeIcon icon={faHome}
+                                                             className="fa-facebook"></FontAwesomeIcon> Home
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
-                                        <a href="/Calendar">
-                                            <FontAwesomeIcon icon={faCalendar} className="fa-facebook"></FontAwesomeIcon> Garde
+                                        <a href="/CBP_Calendar">
+                                            <FontAwesomeIcon icon={faCalendar}
+                                                             className="fa-facebook"></FontAwesomeIcon> Garde
                                         </a>
+                                    </li>
+
+                                    <li className="sp-menu-item">
+  <span>
+    <FontAwesomeIcon icon={faCalendar} className="fa-facebook"/> Gardes
+  </span>
+                                        <div className="sp-dropdown sp-dropdown-main sp-menu-right">
+                                            <div className="sp-dropdown-inner">
+                                                <ul className="sp-dropdown-items">
+                                                    <li className="sp-menu-item">
+                                                        <a href="/CBP_Calendar">
+                                                            <span className="far fa-calendar-alt"/> Gardes CBP
+                                                        </a>
+                                                    </li>
+                                                    <li className="sp-menu-item">
+                                                        <a href="/CFS_Calendar">
+                                                            <span className="far fa-calendar-alt"/> Gardes CFS
+                                                        </a>
+                                                    </li>
+                                                    <li className="sp-menu-item">
+                                                        <a href="/SCH_Calendar">
+                                                            <span className="far fa-calendar-alt"/> Gardes SCH
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </li>
                                     <li className="sp-menu-item">
                                         <a href="/Documents">
-                                            <FontAwesomeIcon icon={faFile} className="fa-facebook"></FontAwesomeIcon> Documents
+                                            <FontAwesomeIcon icon={faFile}
+                                                             className="fa-facebook"></FontAwesomeIcon> Documents
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
                                         <a href="https://silvamedic.lms.sapsf.eu/learning/user/personal/viewPersonalHome.do?OWASP_CSRFTOKEN=TYES-8K4D-BBIC-1OAO-AXS6-DT40-ERNO-8HXI&fromSF=Y&fromDeepLink=true">
-                                            <FontAwesomeIcon icon={faBook} className="fa-facebook"></FontAwesomeIcon> Formation
+                                            <FontAwesomeIcon icon={faBook}
+                                                             className="fa-facebook"></FontAwesomeIcon> Formation
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
                                         <a href="https://hcm55.sapsf.eu/sf/careers/jobsearch?bplte_company=silvamedic">
-                                            <FontAwesomeIcon icon={faIdBadge} className="fa-facebook"></FontAwesomeIcon> Carrière
+                                            <FontAwesomeIcon icon={faIdBadge}
+                                                             className="fa-facebook"></FontAwesomeIcon> Carrière
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
                                         <a href="/Galerie">
-                                            <FontAwesomeIcon icon={faImages} className="fa-facebook"></FontAwesomeIcon> Galerie
+                                            <FontAwesomeIcon icon={faImages}
+                                                             className="fa-facebook"></FontAwesomeIcon> Galerie
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">

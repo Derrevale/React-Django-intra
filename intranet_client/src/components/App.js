@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import Topbar from "./Topbar";
-import MyCalendar from "./Calendar/Calendar";
+import CalendarCBP from "./Calendar/CBP/CalendarCBP";
+import CalendarCFS from "./Calendar/CFS/CalendarCFS";
+import CalendarSCH from "./Calendar/SCH/CalendarSCH";
+
 
 import {
     createBrowserRouter,
@@ -22,7 +25,9 @@ function App() {
         createRoutesFromElements(
             <Route path="/" element={<Root/>}>
                 <Route index element={<ArticleList/>}/>
-                <Route path="/calendar" element={<MyCalendar/>}/>
+                <Route path="/CBP_Calendar" element={<CalendarCBP/>}/>
+                <Route path="/CFS_Calendar" element={<CalendarCFS/>}/>
+                <Route path="/SCH_Calendar" element={<CalendarSCH/>}/>
                 <Route path="/eventform" element={<AddEventForm/>}/>
                 <Route path="/articlelist" element={<ArticleList/>}/>
                 <Route path="/articles/:id" element={<Article/>}/>
