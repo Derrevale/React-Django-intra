@@ -2,14 +2,15 @@ import { RRule } from 'rrule';
 
 const API_URL = "http://localhost:8002/api/event/";
 
-const getEvents = async () => {
+const getEvents = async (category) => {
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
     const events = [];
 
     data.forEach((event) => {
-      if (event.category === 2) { // filter events with category 2 --> CFS
+      console.log(typeof category)
+      if (event.category === category) { // filter events with matching category
         if (!event.recurrency) {
           events.push({
             id: event.id,
