@@ -2,8 +2,23 @@ import '../styles/Navbar.css'
 import '../styles/bootstrap.min.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome, faCalendar, faFile, faBook, faIdBadge, faImages, faSearch} from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function Navbar() {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:8002/api/calendrier/")
+            .then((response) => setCategories(response.data))
+            .catch((error) => console.log(error));
+    }, []);
     return <header id="banner_header">
         <div className="container">
             <div className="container-inner">
@@ -36,38 +51,27 @@ function Navbar() {
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
-                                        <a href="/CBP_Calendar">
-                                            <FontAwesomeIcon icon={faCalendar}
-                                                             className="fa-facebook"></FontAwesomeIcon> Garde
+                                        <a onClick={toggleDropdown}>
+                                            <FontAwesomeIcon
+                                                icon={faCalendar}
+                                                className="fa-facebook"
+                                            ></FontAwesomeIcon>{" "}
+                                            Garde
                                         </a>
-                                    </li>
-
-                                    <li className="sp-menu-item">
-  <span>
-    <FontAwesomeIcon icon={faCalendar} className="fa-facebook"/> Gardes
-  </span>
-                                        <div className="sp-dropdown sp-dropdown-main sp-menu-right">
-                                            <div className="sp-dropdown-inner">
-                                                <ul className="sp-dropdown-items">
-                                                    <li className="sp-menu-item">
-                                                        <a href="/CBP_Calendar">
-                                                            <span className="far fa-calendar-alt"/> Gardes CBP
-                                                        </a>
-                                                    </li>
-                                                    <li className="sp-menu-item">
-                                                        <a href="/CFS_Calendar">
-                                                            <span className="far fa-calendar-alt"/> Gardes CFS
-                                                        </a>
-                                                    </li>
-                                                    <li className="sp-menu-item">
-                                                        <a href="/SCH_Calendar">
-                                                            <span className="far fa-calendar-alt"/> Gardes SCH
-                                                        </a>
-                                                    </li>
+                                        {showDropdown && (
+                                            <div className="dropdown">
+                                                <ul>
+                                                    {categories.map((category, index) => (
+                                                        <li key={index}>
+                                                            <a href={`/calendrier/${category.id}`}>{category.name}</a>
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </div>
-                                        </div>
+                                        )}
                                     </li>
+
+
                                     <li className="sp-menu-item">
                                         <a href="/Documents">
                                             <FontAwesomeIcon icon={faFile}
