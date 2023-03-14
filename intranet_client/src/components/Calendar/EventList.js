@@ -9,7 +9,6 @@ const getEvents = async (category) => {
     const events = [];
 
     data.forEach((event) => {
-      console.log(typeof category)
       if (event.category === category) { // filter events with matching category
         if (!event.recurrency) {
           events.push({

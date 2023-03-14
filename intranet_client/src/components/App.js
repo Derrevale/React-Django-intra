@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import Topbar from "./Topbar";
-import CalendarEvent from "./Calendar/CBP/CalendarEvent";
+import CalendarEvent from "./Calendar/CalendarEvent";
 
 
 import {

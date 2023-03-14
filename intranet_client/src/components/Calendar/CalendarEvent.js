@@ -2,10 +2,10 @@ import React, {Component, useState} from "react";
 import {Calendar, momentLocalizer} from "react-big-calendar";
 import moment from "moment";
 import 'moment/locale/fr'; // Importe les fichiers de localisation français de Moment.js
-import "../../../styles/Calendar/Calendar.css";
+import "../../styles/Calendar/Calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import getEvents from "./EventList";
-import Popup from "../Popup";
+import Popup from "./Popup";
 import queryString from "query-string";
 
 
@@ -22,7 +22,6 @@ class CalendarEvent extends Component {
 
     async componentDidMount() {
         const id = parseInt(window.location.pathname.split("/")[2]);
-        console.log(id);
         const events = await getEvents(id);
         this.setState({events});
     }
