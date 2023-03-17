@@ -14,6 +14,10 @@ from blog.views import ArticlesViewset
 from calendrier.views import CalendarysViewset
 from calendrier.views import EventViewset
 
+from documents.views import DocumentViewSet
+from documents.views import CategoryDocumentViewSet
+
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Intranet-Silva-Medical API",
@@ -31,11 +35,14 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 
-router.register('category', CategorysViewset)
+router.register('Article_Category', CategorysViewset)
 router.register('article', ArticlesViewset)
 
 router.register('calendrier', CalendarysViewset)
 router.register('event', EventViewset)
+
+router.register('Document_Category', CategoryDocumentViewSet)
+router.register('Document', DocumentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,4 +50,4 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

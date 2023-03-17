@@ -16,6 +16,7 @@ import {
 import ArticleList from "./Blog/ArticleList";
 import Article from "./Blog/Article";
 import AddEventForm from "./Formulaire/EventForm";
+import Documents from "./Documents/Documents";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/eventform" element={<AddEventForm/>}/>
                 <Route path="/articlelist" element={<ArticleList/>}/>
                 <Route path="/articles/:id" element={<Article/>}/>
+                <Route path="/documents" element={<Documents/>}/>
                 <Route element={<Navbar/>}/>
             </Route>
         )
