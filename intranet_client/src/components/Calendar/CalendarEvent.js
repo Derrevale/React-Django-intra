@@ -42,11 +42,11 @@ class CalendarEvent extends Component {
     render() {
         const {events, selectedEvent, showPopup} = this.state;
         return (
-            <div className="Calendar">
+            <section className="Calendar">
                 <Calendar
                     localizer={localizer}
                     defaultDate={new Date()}
-                    defaultView="month"
+                    defaultView="agenda"
                     events={events}
                     style={{height: "100vh"}}
                     onSelectEvent={this.handleSelectEvent}
@@ -60,7 +60,7 @@ class CalendarEvent extends Component {
                         handleClosePopup={this.handleClosePopup}
                     />
                 )}
-            </div>
+            </section>
         );
     }
 }

@@ -1,25 +1,35 @@
-# Importation de l'interface d'administration de Django
 from django.contrib import admin
-
-# Importation de vos modèles de calendrier
 from .models import Calendar, Event
 
 
-# Enregistrement de la classe CalendarAdmin pour l'interface d'administration de Django
+class EventInline(admin.TabularInline):
+    model = Event
+    extra = 0
+    fields = ('title', 'Debut', 'Fin', 'description')
+    show_change_link = True
+    verbose_name_plural = 'Events'
+
+
 @admin.register(Calendar)
 class CalendarAdmin(admin.ModelAdmin):
-    # Définition des champs qui seront affichés dans la liste des calendriers dans l'interface d'administration de Django
     list_display = ('name',)
-    # Définition des champs qui seront préremplis à partir de champs existants lors de la création d'un nouveau calendrier dans l'interface d'administration de Django
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [EventInline]
 
 
-# Enregistrement de la classe EventTypeAdmin pour l'interface d'administration de Django
 @admin.register(Event)
-class EventTypeAdmin(admin.ModelAdmin):
-    # Définition des champs qui seront affichés dans la liste des types d'événements dans l'interface d'administration de Django
-    list_display = ('title',)
-    # Définition des champs qui seront préremplis à partir de champs existants lors de la création d'un nouveau type d'événement dans l'interface d'administration de Django
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'Debut', 'Fin', 'location')
+    list_filter = ('category', 'recurrency')
+    search_fields = ('title', 'location')
     exclude = ('rrule',)
 
-
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'Debut', 'Fin', 'location','description')
+        }),
+        ('Optional', {
+            'fields': ('recurrency','frequency', 'count', 'interval'),
+            'classes': ('collapse',)
+        }),
+    )

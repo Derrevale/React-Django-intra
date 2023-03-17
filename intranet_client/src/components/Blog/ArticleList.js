@@ -12,7 +12,7 @@ function ArticleList() {
     }, []);
 
     return (
-        <div className="row row-1 cols-3">
+        <section className="row row-1 cols-3">
             {articles.map((article) => (
                 <div className="col-lg-4" key={article.id}>
                     <div className="articleList-item">
@@ -33,7 +33,7 @@ function ArticleList() {
                     </div>
                 </div>
             ))}
-        </div>
+        </section>
     );
 }
 
