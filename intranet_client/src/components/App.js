@@ -17,6 +17,7 @@ import ArticleList from "./Blog/ArticleList";
 import Article from "./Blog/Article";
 import AddEventForm from "./Formulaire/EventForm";
 import Documents from "./Documents/Documents";
+import Gallery from "./Galery/Galery";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/articlelist" element={<ArticleList/>}/>
                 <Route path="/articles/:id" element={<Article/>}/>
                 <Route path="/documents" element={<Documents/>}/>
+                <Route path="/Galerie" element={<Gallery/>}/>
                 <Route element={<Navbar/>}/>
             </Route>
         )
