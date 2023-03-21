@@ -13,10 +13,7 @@ export default function ControlledTreeView() {
         fetch('http://localhost:8002/api/Document_Category/')
             .then(response => response.json())
             .then(data => {
-                // créer une liste des catégories avec une propriété children vide
                 const categories = data.map(c => ({...c, children: []}));
-
-                // remplir les propriétés children avec les noms des enfants
                 categories.forEach(category => {
                     if (category.children.length > 0) {
                         category.children = category.children.map(childName =>
@@ -24,14 +21,20 @@ export default function ControlledTreeView() {
                         );
                     }
                 });
-
-                // mettre à jour l'état local avec les catégories modifiées
                 setCategories(categories);
             })
             .catch(error => console.log(error));
     }, []);
 
-    // groupCategoriesByParent permet de grouper les catégories par parent
+    const [documents, setDocuments] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:8002/api/Document/')
+            .then(response => response.json())
+            .then(data => setDocuments(data))
+            .catch(error => console.log(error));
+    }, []);
+
     const groupCategoriesByParent = (categories) => {
         const groupedCategories = {};
         categories.forEach((category) => {
@@ -55,26 +58,36 @@ export default function ControlledTreeView() {
         return Object.values(groupedCategories).filter(category => !category.parent);
     };
 
-
-    // renderTree permet de rendre un arbre à partir des catégories
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id} nodeId={nodes.id.toString()} label={nodes.name}>
             {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
+            {Array.isArray(nodes.files) ? nodes.files.map((document) => (
+                <TreeItem key={document.id} nodeId={document.id.toString()} label={document.name}/>
+            )) : null}
         </TreeItem>
     );
 
-    // Les catégories sont groupées par parent
     const groupedCategories = groupCategoriesByParent(categories);
 
+// les fichiers sont regroupés par catégorie
+    documents.forEach(document => {
+        console.log(document);
+        const category = categories.find(c => c.id === document.category);
+        if (category) {
+            if (!category.files) {
+                category.files = [];
+            }
+            category.files.push(document);
+        }
+    });
+
     return (
-        // Le composant TreeView permet de rendre l'arbre
         <Box sx={{height: 270, flexGrow: 1, maxWidth: 400, overflowY: 'auto'}}>
             <TreeView
                 aria-label="controlled"
                 defaultCollapseIcon={<ExpandMoreIcon/>}
                 defaultExpandIcon={<ChevronRightIcon/>}
             >
-                {/* Object.values permet de transformer l'objet en tableau */}
                 {Object.values(groupedCategories).map((category) => renderTree(category))}
             </TreeView>
         </Box>
