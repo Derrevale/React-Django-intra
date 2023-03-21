@@ -17,7 +17,6 @@ from calendrier.views import EventViewset
 from documents.views import DocumentViewSet
 from documents.views import CategoryDocumentViewSet
 
-
 schema_view = get_schema_view(
     openapi.Info(
         title="Intranet-Silva-Medical API",
@@ -43,6 +42,7 @@ router.register('event', EventViewset)
 
 router.register('Document_Category', CategoryDocumentViewSet)
 router.register('Document', DocumentViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

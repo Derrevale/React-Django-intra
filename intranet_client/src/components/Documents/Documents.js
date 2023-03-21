@@ -1,69 +1,82 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 export default function ControlledTreeView() {
-  const [expanded, setExpanded] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
+    // useState permet de stocker les données dans un état local
+    const [categories, setCategories] = useState([]);
 
-  const handleToggle = (event, nodeIds) => {
-    setExpanded(nodeIds);
-  };
+    useEffect(() => {
+        fetch('http://localhost:8002/api/Document_Category/')
+            .then(response => response.json())
+            .then(data => {
+                // créer une liste des catégories avec une propriété children vide
+                const categories = data.map(c => ({...c, children: []}));
 
-  const handleSelect = (event, nodeIds) => {
-    setSelected(nodeIds);
-  };
+                // remplir les propriétés children avec les noms des enfants
+                categories.forEach(category => {
+                    if (category.children.length > 0) {
+                        category.children = category.children.map(childName =>
+                            categories.find(c => c.name === childName)
+                        );
+                    }
+                });
 
-  const handleExpandClick = () => {
-    setExpanded((oldExpanded) =>
-      oldExpanded.length === 0 ? ['1', '5', '6', '7'] : [],
-    );
-  };
+                // mettre à jour l'état local avec les catégories modifiées
+                setCategories(categories);
+            })
+            .catch(error => console.log(error));
+    }, []);
 
-  const handleSelectClick = () => {
-    setSelected((oldSelected) =>
-      oldSelected.length === 0 ? ['1', '2', '3', '4', '5', '6', '7', '8', '9'] : [],
-    );
-  };
+    // groupCategoriesByParent permet de grouper les catégories par parent
+    const groupCategoriesByParent = (categories) => {
+        const groupedCategories = {};
+        categories.forEach((category) => {
+            const parentId = category.parent;
+            const categoryId = category.id;
+            if (!categoryId) {
+                console.error('No id property found for category:', category);
+                return;
+            }
+            if (!groupedCategories[categoryId]) {
+                groupedCategories[categoryId] = {...category, children: []};
+            }
+            if (parentId) {
+                if (!groupedCategories[parentId]) {
+                    console.error('No parent found for category:', category);
+                    return;
+                }
+                groupedCategories[parentId].children.push(groupedCategories[categoryId]);
+            }
+        });
+        return Object.values(groupedCategories).filter(category => !category.parent);
+    };
 
-  return (
-    <Box sx={{ height: 270, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}>
-      <Box sx={{ mb: 1 }}>
-        <Button onClick={handleExpandClick}>
-          {expanded.length === 0 ? 'Expand all' : 'Collapse all'}
-        </Button>
-        <Button onClick={handleSelectClick}>
-          {selected.length === 0 ? 'Select all' : 'Unselect all'}
-        </Button>
-      </Box>
-      <TreeView
-        aria-label="controlled"
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronRightIcon />}
-        expanded={expanded}
-        selected={selected}
-        onNodeToggle={handleToggle}
-        onNodeSelect={handleSelect}
-        multiSelect
-      >
-        <TreeItem nodeId="1" label="Applications">
-          <TreeItem nodeId="2" label="Calendar" />
-          <TreeItem nodeId="3" label="Chrome" />
-          <TreeItem nodeId="4" label="Webstorm" />
+
+    // renderTree permet de rendre un arbre à partir des catégories
+    const renderTree = (nodes) => (
+        <TreeItem key={nodes.id} nodeId={nodes.id.toString()} label={nodes.name}>
+            {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
         </TreeItem>
-        <TreeItem nodeId="5" label="Documents">
-          <TreeItem nodeId="6" label="MUI">
-            <TreeItem nodeId="7" label="src">
-              <TreeItem nodeId="8" label="index.js" />
-              <TreeItem nodeId="9" label="tree-view.js" />
-            </TreeItem>
-          </TreeItem>
-        </TreeItem>
-      </TreeView>
-    </Box>
-  );
+    );
+
+    // Les catégories sont groupées par parent
+    const groupedCategories = groupCategoriesByParent(categories);
+
+    return (
+        // Le composant TreeView permet de rendre l'arbre
+        <Box sx={{height: 270, flexGrow: 1, maxWidth: 400, overflowY: 'auto'}}>
+            <TreeView
+                aria-label="controlled"
+                defaultCollapseIcon={<ExpandMoreIcon/>}
+                defaultExpandIcon={<ChevronRightIcon/>}
+            >
+                {/* Object.values permet de transformer l'objet en tableau */}
+                {Object.values(groupedCategories).map((category) => renderTree(category))}
+            </TreeView>
+        </Box>
+    );
 }
