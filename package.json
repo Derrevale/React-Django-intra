@@ -8,6 +8,7 @@
     "@mui/lab": "^5.0.0-alpha.123",
     "@mui/material": "^5.11.13",
     "@mui/styled-engine-sc": "^5.11.11",
+    "@mui/styles": "^5.11.13",
     "moment": "^2.29.4",
     "query-string": "^8.1.0",
     "react-bootstrap": "^2.7.2",

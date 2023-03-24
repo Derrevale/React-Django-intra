@@ -9,6 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',)
     search_fields = ('name', 'description',)
+    exclude = ('name',)
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Document, DocumentAdmin)

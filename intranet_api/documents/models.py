@@ -1,4 +1,8 @@
 from django.db import models
+import os
+
+def get_upload_path(instance, filename):
+    return os.path.join('images', 'documents', filename)
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -13,10 +17,15 @@ class Category(models.Model):
         return self.name
 
 class Document(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
-    file = models.FileField(upload_to='images/documents/')
+    fileUrl = models.FileField(upload_to=get_upload_path)
     categories = models.ManyToManyField(Category, related_name='documents')
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = os.path.basename(self.fileUrl.name)
+        super(Document, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
