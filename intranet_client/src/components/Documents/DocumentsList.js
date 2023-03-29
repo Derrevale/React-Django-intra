@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 
-const DocumentsList = ({ categoryId }) => {
-  const [documents, setDocuments] = useState([]);
+const DocumentsList = () => {
+    const [documents, setDocuments] = useState([]);
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      const response = await fetch(`http://localhost:8002/api/Document/?categoryId=${categoryId}`);
-      const data = await response.json();
-      setDocuments(data);
-    };
-    fetchDocuments();
-  }, [categoryId]);
+    useEffect(() => {
+        axios.get("http://localhost:8002/api/Document/").then((response) => {
+            setDocuments(response.data);
+        });
+    }, []);
 
-  return (
-    <div>
-      {documents.map((document) => (
-        <div key={document.id}>
-          <p>{document.name}</p>
-          <a href={document.fileUrl}>Télécharger</a>
+    return (
+        <div>
+            <h2>Liste des documents</h2>
+            <ul>
+                {documents.map((document) => (
+                    <li key={document.id}>
+                        {document.name} - {document.description}
+                    </li>
+                ))}
+            </ul>
         </div>
-      ))}
-    </div>
-  );
+    );
 };
 
 export default DocumentsList;

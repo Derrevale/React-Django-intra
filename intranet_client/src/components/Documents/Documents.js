@@ -1,52 +1,47 @@
-import React, {useState, useEffect} from 'react';
-import {TreeView, TreeItem} from '@mui/lab';
-import {Typography} from '@mui/material';
-import DocumentsList from './DocumentsList';
+import React, {useState, useEffect} from "react";
+import axios from "axios";
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const Documents = () => {
-    const [categories, setCategories] = useState([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const response = await fetch('http://localhost:8002/api/Document_Category/');
-            const data = await response.json();
-            setCategories(data);
-        };
-        fetchCategories();
-    }, []);
+  useEffect(() => {
+    axios.get("http://localhost:8002/api/Document_Category/").then((response) => {
+      setCategories(response.data);
+    });
+  }, []);
 
-    const getCategoryChildren = (categoryId) => {
-        return categories.filter((category) => category.parent === categoryId);
-    };
+  const buildTree = (categories, parent) => {
+    return categories
+      .filter((category) => category.parent === parent)
+      .map((category) => ({
+        id: category.id,
+        name: category.name,
+        children: buildTree(categories, category.id),
+      }));
+  };
 
-    const renderTree = (category) => {
-        const categoryChildren = getCategoryChildren(category.id);
+  const tree = buildTree(categories, null);
 
-        return (
-            <TreeItem key={category.id} nodeId={category.id.toString()} label={category.name}
-                      onClick={() => setSelectedCategoryId(category.id)}>
-                {categoryChildren.map((childCategory) => renderTree(childCategory))}
-                {selectedCategoryId === category.id && (
-                    <DocumentsList categoryId={category.id}/>
-                )}
-            </TreeItem>
-        );
-    };
+  const renderTree = (nodes) => (
+    <TreeItem key={nodes.id} nodeId={nodes.id.toString()} label={nodes.name}>
+      {Array.isArray(nodes.children)
+        ? nodes.children.map((node) => renderTree(node))
+        : null}
+    </TreeItem>
+  );
 
-    return (
-        <TreeView
-            defaultCollapseIcon={<Typography variant="body2">-</Typography>}
-            defaultExpandIcon={<Typography variant="body2">+</Typography>}
-        >
-            {categories.map((category) => {
-                if (category.parent === null) {
-                    return renderTree(category);
-                }
-                return null;
-            })}
-        </TreeView>
-    );
+  return (
+    <TreeView
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
+      {tree.map((node) => renderTree(node))}
+    </TreeView>
+  );
 };
 
 export default Documents;
