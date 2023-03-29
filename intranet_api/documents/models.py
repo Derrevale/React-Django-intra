@@ -1,8 +1,10 @@
 from django.db import models
 import os
 
+
 def get_upload_path(instance, filename):
     return os.path.join('images', 'documents', filename)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -15,6 +17,13 @@ class Category(models.Model):
         if self.parent:
             return f'{self.parent} > {self.name}'
         return self.name
+
+    def documents(self):
+        """
+        Returns a queryset of documents associated with this category
+        """
+        return self.documents.all()
+
 
 class Document(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
