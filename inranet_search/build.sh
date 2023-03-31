@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker build . -t silva/loki
+docker build . -t percil/silva_loki
 

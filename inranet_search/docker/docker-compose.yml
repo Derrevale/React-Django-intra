@@ -12,7 +12,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
 
   loki:
-    image: silva/loki
+    image: percil/silva_loki
     restart: unless-stopped
     depends_on:
       - mongo
