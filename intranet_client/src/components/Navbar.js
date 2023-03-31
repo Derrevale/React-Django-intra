@@ -2,13 +2,21 @@ import '../styles/Navbar.css'
 import '../styles/bootstrap.min.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome, faCalendar, faFile, faBook, faIdBadge, faImages, faSearch} from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
 
 function Navbar() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const handleChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        window.location.href = `/search?q=${searchQuery}`;
+    };
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
     };
@@ -97,9 +105,12 @@ function Navbar() {
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
-                                        <a href="/off-menu">
-                                            <span className="..."></span> Off-menu
-                                        </a>
+                                        <FontAwesomeIcon icon={faSearch}
+                                                             className="fa-search"></FontAwesomeIcon>
+                                        <form onSubmit={handleSubmit}>
+                                            <input type="text" placeholder="Search" value={searchQuery}
+                                                   onChange={handleChange}/>
+                                        </form>
                                     </li>
                                 </ul>
                             </nav>

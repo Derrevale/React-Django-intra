@@ -33,7 +33,7 @@ const FileImports = () => {
             formData.append('file', file);
         });
         formData.append('description', description);
-        formData.append('categories', JSON.stringify(selectedCategory));
+        formData.append('categories', selectedCategory);
         axios.post('http://localhost:8002/api/Document/', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
