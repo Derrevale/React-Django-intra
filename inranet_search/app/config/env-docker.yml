@@ -1,0 +1,8 @@
+mongo:
+  host: loki-mongo
+  port: 27017
+  user: root
+  password: example
+
+tesseract:
+  path: /usr/bin/tesseract

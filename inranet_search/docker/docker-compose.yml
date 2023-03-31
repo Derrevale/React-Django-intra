@@ -5,6 +5,7 @@ services:
   mongo:
     image: mongo
     restart: unless-stopped
+    hostname: loki-mongo
     ports:
       - "27017:27017"
     environment:
