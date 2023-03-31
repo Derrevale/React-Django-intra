@@ -455,6 +455,6 @@ cython_debug/
 */.idea
 
 *.iml
-*/venv
-*/node_modules
-*/*.sqlite3
+**/venv
+**/node_modules
+**/*.sqlite3
