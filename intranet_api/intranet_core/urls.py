@@ -21,7 +21,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Intranet-Silva-Medical API",
         default_version='v1',
-        description="Api de l'application Rolisticae, "
+        description="Api de l'Intranet Silva-Medical, "
                     "<br> Catégorie de blog"
                     "<br> Article de blog",
         terms_of_service="https://www.google.com/policies/terms/",
