@@ -6,42 +6,56 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const Documents = () => {
-  const [categories, setCategories] = useState([]);
+    const [data, setData] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:8002/api/Document_Category/").then((response) => {
-      setCategories(response.data);
-    });
-  }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await axios("http://localhost:8002/api/Document_Category/");
+            setData(result.data);
+        };
+        fetchData();
+    }, []);
 
-  const buildTree = (categories, parent) => {
-    return categories
-      .filter((category) => category.parent === parent)
-      .map((category) => ({
-        id: category.id,
-        name: category.name,
-        children: buildTree(categories, category.id),
-      }));
-  };
+    const renderTree = (nodes) =>
+        nodes.map((node) => (
+            <React.Fragment>
+                {console.log("node:--------avant-----------")}
+                {console.log(node)}
+                {console.log("----------après---------")}
+                {node.id && (
+                    <TreeItem key={node.name} nodeId={node.name} label={node.name}>
+                        {Array.isArray(node.children) && node.children.length > 0 && (
+                            <React.Fragment>{renderTree(node.children)}</React.Fragment>
+                        )}
+                        {Array.isArray(node.files) &&
+                            node.files.map((file) => (
+                                <TreeItem
+                                    key={file.name}
+                                    nodeId={file.name}
+                                    label={
+                                        <a
+                                            href={`http://localhost:8002${file.fileUrl}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {file.name}
+                                        </a>
+                                    }
+                                />
+                            ))}
+                    </TreeItem>
+                )}
+            </React.Fragment>
+        ));
 
-  const tree = buildTree(categories, null);
-
-  const renderTree = (nodes) => (
-    <TreeItem key={nodes.id} nodeId={nodes.id.toString()} label={nodes.name}>
-      {Array.isArray(nodes.children)
-        ? nodes.children.map((node) => renderTree(node))
-        : null}
-    </TreeItem>
-  );
-
-  return (
-    <TreeView
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-    >
-      {tree.map((node) => renderTree(node))}
-    </TreeView>
-  );
+    return (
+        <TreeView
+            defaultCollapseIcon={<ExpandMoreIcon/>}
+            defaultExpandIcon={<ChevronRightIcon/>}
+        >
+            {renderTree(data)}
+        </TreeView>
+    );
 };
 
 export default Documents;
