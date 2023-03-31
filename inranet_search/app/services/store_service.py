@@ -1,6 +1,5 @@
 from typing import Dict
 
-import bson
 from pymongo import MongoClient
 
 from app.core.config import cfg
@@ -69,12 +68,13 @@ class StoreService:
             logger.error(f'Error: {e}')
 
     def search(self, q: str):
+        """
+        Searches for a given query in the database.
+        :param q: the query to search for.
+        :return: the list of documents that match the query.
+        """
         to_return = []
         try:
-
-            # regex = f'^/{q}/i'
-            regex = bson.regex.Regex('^' + q, flags='i')
-            # regex = re.compile('^' + re.escape(q), re.IGNORECASE)
 
             # Fetch the database
             db = self.client().get_database(self.database)
@@ -97,6 +97,12 @@ class StoreService:
         return to_return
 
     def get_by_external_id(self, external_id: int):
+        """
+        Searches for a given external_id in the database.
+        :param external_id: the external_id to search for.
+        :return: the document that matches the external_id.
+        """
+
         to_return = None
         try:
             # Fetch the database

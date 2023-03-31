@@ -458,3 +458,4 @@ cython_debug/
 **/venv
 **/node_modules
 **/*.sqlite3
+*processing_folder/*

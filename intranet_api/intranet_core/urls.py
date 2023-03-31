@@ -1,21 +1,20 @@
-from django.contrib import admin
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
 from django.views.static import serve
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from rest_framework.routers import DefaultRouter
 
-from blog.views import CategorysViewset
+import documents.views
 from blog.views import ArticlesViewset
-
+from blog.views import CategorysViewset
 from calendrier.views import CalendarysViewset
 from calendrier.views import EventViewset
-
-from documents.views import DocumentViewSet
 from documents.views import CategoryDocumentViewSet
+from documents.views import DocumentViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -43,11 +42,11 @@ router.register('event', EventViewset)
 router.register('Document_Category', CategoryDocumentViewSet)
 router.register('Document', DocumentViewSet)
 
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('admin/', admin.site.urls),
+                  path('api/', include(router.urls)),
+                  path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+                  path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+                  path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+                  path('api/search/', documents.views.SearchView.as_view(), name='search'),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
