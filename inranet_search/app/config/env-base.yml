@@ -1,0 +1,3 @@
+mongo:
+  database: loki
+  collection: file_content

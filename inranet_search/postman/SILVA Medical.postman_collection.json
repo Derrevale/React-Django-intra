@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "b9dc529e-0397-4e5f-a6c4-e01c2bc35e2b",
+		"name": "SILVA Medical",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14218121"
+	},
+	"item": [
+		{
+			"name": "Process",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/percil/Desktop/to_sort/00 les bases.docx"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/process",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"process"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/process",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"process"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
