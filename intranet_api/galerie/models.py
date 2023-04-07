@@ -11,7 +11,13 @@ class Category_Galerie(models.Model):
                                               related_name='illustration_for_category')
 
     def __str__(self):
-        return self.name
+        return self.title
+
+    class Meta:
+        # Nom humain de la classe pour l'interface d'administration de Django
+        verbose_name = 'Catégorie'
+        # Nom humain du pluriel de la classe pour l'interface d'administration de Django
+        verbose_name_plural = 'Catégories'
 
 
 class Image_Galerie(models.Model):
@@ -20,6 +26,12 @@ class Image_Galerie(models.Model):
 
     def __str__(self):
         return self.image.name
+
+    class Meta:
+        # Nom humain de la classe pour l'interface d'administration de Django
+        verbose_name = 'Image'
+        # Nom humain du pluriel de la classe pour l'interface d'administration de Django
+        verbose_name_plural = 'Images'
 
 
 @receiver(models.signals.pre_delete, sender=Category_Galerie)

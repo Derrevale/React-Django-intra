@@ -1,61 +1,67 @@
-import React, {useState, useEffect} from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const Documents = () => {
-    const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios("http://localhost:8002/api/Document_Category/");
-            setData(result.data);
-        };
-        fetchData();
-    }, []);
+  const buildHierarchy = (items) => {
+    const itemMap = new Map();
+    items.forEach((item) => itemMap.set(item.id, { ...item, children: [] }));
+    const result = [];
 
-    const renderTree = (nodes) =>
-        nodes.map((node) => (
-            <React.Fragment>
-                {console.log("node:--------avant-----------")}
-                {console.log(node)}
-                {console.log("----------après---------")}
-                {node.id && (
-                    <TreeItem key={node.name} nodeId={node.name} label={node.name}>
-                        {Array.isArray(node.children) && node.children.length > 0 && (
-                            <React.Fragment>{renderTree(node.children)}</React.Fragment>
-                        )}
-                        {Array.isArray(node.files) &&
-                            node.files.map((file) => (
-                                <TreeItem
-                                    key={file.name}
-                                    nodeId={file.name}
-                                    label={
-                                        <a
-                                            href={`http://localhost:8002${file.fileUrl}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {file.name}
-                                        </a>
-                                    }
-                                />
-                            ))}
-                    </TreeItem>
-                )}
-            </React.Fragment>
-        ));
+    for (const item of itemMap.values()) {
+      if (item.parent) {
+        const parent = itemMap.get(item.parent.id);
+        parent.children.push(item);
+      } else {
+        result.push(item);
+      }
+    }
 
-    return (
-        <TreeView
-            defaultCollapseIcon={<ExpandMoreIcon/>}
-            defaultExpandIcon={<ChevronRightIcon/>}
-        >
-            {renderTree(data)}
-        </TreeView>
-    );
+    return result;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios('http://localhost:8002/api/FileManager Categorie/');
+      const hierarchy = buildHierarchy(result.data);
+      setData(hierarchy);
+    };
+    fetchData();
+  }, []);
+
+  const renderTree = (nodes) =>
+    nodes.map((node) => (
+      <TreeItem key={node.id} nodeId={node.id.toString()} label={node.name}>
+        {node.children.length > 0 && renderTree(node.children)}
+        {Array.isArray(node.files) &&
+          node.files.map((file) => (
+            <TreeItem
+              key={file.name}
+              nodeId={file.name}
+              label={
+                <a
+                  href={`http://localhost:8002${file.fileUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {file.name}
+                </a>
+              }
+            />
+          ))}
+      </TreeItem>
+    ));
+
+  return (
+    <TreeView defaultCollapseIcon={<ExpandMoreIcon />} defaultExpandIcon={<ChevronRightIcon />}>
+      {renderTree(data)}
+    </TreeView>
+  );
 };
 
 export default Documents;

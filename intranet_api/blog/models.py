@@ -1,5 +1,10 @@
 from ckeditor.fields import RichTextField
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+from django.conf import settings
+import os
+
 # Classe qui représente une catégorie d'articles de blog dans la base de données
 class Category_Blog(models.Model):
     # Nom de la catégorie
@@ -41,3 +46,12 @@ class Article_Blog(models.Model):
         verbose_name = 'Article'
         # Nom humain du pluriel de la classe pour l'interface d'administration de Django
         verbose_name_plural = 'Articles'
+
+# Fonction pour gérer le signal pre_delete et supprimer l'image associée à l'article
+@receiver(pre_delete, sender=Article_Blog)
+def article_blog_delete(sender, instance, **kwargs):
+    # Supprime l'image d'en-tête de l'article s'il y en a une
+    if instance.header_image:
+        file_path = os.path.join(settings.MEDIA_ROOT, instance.header_image.path)
+        if os.path.isfile(file_path):
+            os.remove(file_path)

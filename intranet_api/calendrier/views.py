@@ -15,11 +15,13 @@ from rest_framework import viewsets
 class CalendarysViewset(viewsets.ModelViewSet):
     serializer_class = CalendarSerializer
     queryset = Calendar.objects.all()
+    tags = ['EventManager - Calendrier']
 
 
 class EventViewset(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+    tags = ['EventManager - Event']
 
     def get_recurrent_events(self, request, *args, **kwargs):
         events = self.queryset.filter(rrule__isnull=False)

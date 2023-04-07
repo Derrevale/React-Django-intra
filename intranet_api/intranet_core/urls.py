@@ -24,8 +24,15 @@ schema_view = get_schema_view(
         title="Intranet-Silva-Medical API",
         default_version='v1',
         description="Api de l'Intranet Silva-Medical, "
-                    "<br> Catégorie de blog"
-                    "<br> Article de blog",
+                    "Cette API permet de gérer les données de l'intranet, "
+                    "<br> Elle permet de gérer les données des applications suivantes : "
+                    "<ul>"
+                    "<li>Calendrier d'événement ( calendrier et événement )</li>"
+                    "<li> Gestionnaire de fichier ( catégorie et fichier )</li>"
+                    "<li> Galerie d' images ( catégorie et image )</li>"
+                    "<li> Blog ( catégorie et article )</li>"
+                    "<li> Outils de recherche ( documents )</li>"
+                    "</ul>",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),

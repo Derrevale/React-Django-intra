@@ -11,7 +11,7 @@ const FileImports = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8002/api/Document_Category/');
+                const response = await axios.get('http://localhost:8002/api/FileManager Categorie/');
                 setCategories(response.data);
                 setIsLoading(false);
             } catch (error) {
@@ -34,7 +34,7 @@ const FileImports = () => {
         });
         formData.append('description', description);
         formData.append('categories', selectedCategory);
-        axios.post('http://localhost:8002/api/Document/', formData, {
+        axios.post('http://localhost:8002/api/FileManager File/', formData, {
             headers: {
                 'Content-Type': 'application/json',
             },

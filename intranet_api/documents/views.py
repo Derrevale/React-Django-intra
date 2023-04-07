@@ -8,11 +8,13 @@ from .serializers import CategoryDocumentSerializer, DocumentSerializer
 class CategoryDocumentViewSet(viewsets.ModelViewSet):
     serializer_class = CategoryDocumentSerializer
     queryset = Category_FileManager.objects.all()
+    tags = ['FileManager - Category']
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     queryset = Document.objects.all()
+    tags = ['FileManager - File']
 
 
 class SearchView(views.APIView):
