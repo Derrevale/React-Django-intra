@@ -459,3 +459,5 @@ cython_debug/
 **/node_modules
 **/*.sqlite3
 *processing_folder/*
+
+intranet_api/images/
