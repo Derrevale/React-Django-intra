@@ -26,7 +26,7 @@ class EventAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'Debut', 'Fin', 'location','description')
+            'fields': ('title','category', 'Debut', 'Fin', 'location','description')
         }),
         ('Optional', {
             'fields': ('recurrency','frequency', 'count', 'interval'),

@@ -1,7 +1,7 @@
 import '../styles/Navbar.css'
 import '../styles/bootstrap.min.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome, faCalendar, faFile, faBook, faIdBadge, faImages, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faHome, faCalendar, faFile, faBook, faIdBadge, faImages, faSearch ,faBars} from "@fortawesome/free-solid-svg-icons";
 import {useState, useEffect} from "react";
 import axios from "axios";
 
@@ -105,12 +105,18 @@ function Navbar() {
                                         </a>
                                     </li>
                                     <li className="sp-menu-item">
-                                        <FontAwesomeIcon icon={faSearch}
-                                                             className="fa-search"></FontAwesomeIcon>
-                                        <form onSubmit={handleSubmit}>
-                                            <input type="text" placeholder="Search" value={searchQuery}
+
+                                        <form className="center-align" onSubmit={handleSubmit}>
+                                            <FontAwesomeIcon icon={faSearch}> </FontAwesomeIcon>
+                                            <input className="center-align" type="text" placeholder="Search" value={searchQuery}
                                                    onChange={handleChange}/>
                                         </form>
+                                    </li>
+                                    <li className="sp-menu-item">
+                                        <a href="/Galerie">
+                                            <FontAwesomeIcon icon={faBars}
+                                                             className="fa-bars" size='xl'></FontAwesomeIcon> Off Canvas
+                                        </a>
                                     </li>
                                 </ul>
                             </nav>

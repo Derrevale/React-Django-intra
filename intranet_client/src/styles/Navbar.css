@@ -77,3 +77,11 @@
     pointer-events: none;
     background-color: transparent;
 }
+
+.center-align {
+    text-align: center;
+    display: inline-block;
+    box-sizing: content-box;
+    margin-top: 14px;
+    margin-left: 5px ;
+}
