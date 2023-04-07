@@ -64,7 +64,7 @@ const Documents = () => {
         ));
 
     return (
-        <div className="test" style={{margin: '2%', padding: '1%'}}>
+        <div className="test" style={{margin: '2%', padding: '1%',width:'75%'}}>
             <TreeView defaultCollapseIcon={<ExpandMoreIcon/>} defaultExpandIcon={<ChevronRightIcon/>}>
                 {renderTree(data)}
             </TreeView>

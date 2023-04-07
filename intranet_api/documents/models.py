@@ -1,7 +1,6 @@
 import os
-
 from django.db import models
-
+from django.dispatch import receiver
 from intranet_core.settings import logger
 
 
@@ -35,21 +34,11 @@ class Document(models.Model):
     categories = models.ManyToManyField(Category_FileManager, related_name='documents')
     processed = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = os.path.basename(self.fileUrl.name)
-        super(Document, self).save(*args, **kwargs)
-        if not self.processed:
-            from documents.services import silva_search_service
-            try:
-                silva_search_service.process(self)
-                self.processed = True
-                self.save()
-            except Exception as e:
-                logger.error(f'Error while processing document {self.name}: {e}')
-
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return f"Document {self.id}"
 
     def get_filename(self):
         """
@@ -57,3 +46,33 @@ class Document(models.Model):
         :return: the filename of the document.
         """
         return os.path.basename(self.fileUrl.name)
+
+
+@receiver(models.signals.pre_delete, sender=Document)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem when corresponding `Document` object is deleted.
+    """
+    if instance.fileUrl:
+        if os.path.isfile(instance.fileUrl.path):
+            os.remove(instance.fileUrl.path)
+
+
+@receiver(models.signals.pre_save, sender=Document)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem when corresponding `Document` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = Document.objects.get(pk=instance.pk).fileUrl
+    except Document.DoesNotExist:
+        return False
+
+    new_file = instance.fileUrl
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)

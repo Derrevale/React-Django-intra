@@ -460,4 +460,4 @@ cython_debug/
 **/*.sqlite3
 *processing_folder/*
 
-intranet_api/images/
+intranet_api/images/*

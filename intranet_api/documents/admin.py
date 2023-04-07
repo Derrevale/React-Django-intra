@@ -9,7 +9,6 @@ class CategoryAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',)
     search_fields = ('name', 'description',)
-    exclude = ('name',)
 
 admin.site.register(Category_FileManager, CategoryAdmin)
 admin.site.register(Document, DocumentAdmin)
