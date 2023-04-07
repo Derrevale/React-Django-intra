@@ -5,7 +5,7 @@ function ArticleList() {
     const [articles, setArticles] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8002/api/article/")
+        fetch("http://localhost:8002/api/Blog Article/")
             .then((response) => response.json())
             .then((data) => setArticles(data))
             .catch((error) => console.log(error));

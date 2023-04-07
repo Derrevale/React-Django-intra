@@ -32,7 +32,7 @@ function Navbar() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8002/api/calendrier/')
+            .get('http://localhost:8002/api/EventManager Calendrier /')
             .then((response) => setCategories(response.data))
             .catch((error) => console.log(error));
     }, []);
