@@ -1,7 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.db import models
 # Classe qui représente une catégorie d'articles de blog dans la base de données
-class Category(models.Model):
+class Category_Blog(models.Model):
     # Nom de la catégorie
     name = models.CharField(max_length=50, null=True, blank=False, verbose_name='Name')
     # Champ "slug" généré à partir du nom de la catégorie qui sera utilisé dans les URL
@@ -18,13 +18,13 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
 # Classe qui représente un article de blog dans la base de données
-class Article(models.Model):
+class Article_Blog(models.Model):
     # Titre de l'article
     title = models.CharField(max_length=150, null=False, blank=False, verbose_name='Title')
     # Image d'en-tête de l'article
     header_image = models.ImageField(null=True, blank=True, upload_to="images/blog/")
     # Catégorie à laquelle appartient l'article
-    category = models.ForeignKey(Category, null=True, blank=False, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category_Blog, null=True, blank=False, on_delete=models.SET_NULL)
     # Introduction de l'article, utilisant le champ de texte riche de CKEditor
     intro = RichTextField(null=True)
     # Contenu de l'article, utilisant le champ de texte riche de CKEditor

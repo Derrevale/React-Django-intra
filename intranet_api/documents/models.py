@@ -9,7 +9,7 @@ def get_upload_path(instance, filename):
     return os.path.join('images', 'documents', filename)
 
 
-class Category(models.Model):
+class Category_FileManager(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
 
@@ -32,7 +32,7 @@ class Document(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     fileUrl = models.FileField(upload_to=get_upload_path)
-    categories = models.ManyToManyField(Category, related_name='documents')
+    categories = models.ManyToManyField(Category_FileManager, related_name='documents')
     processed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):

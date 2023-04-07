@@ -16,6 +16,9 @@ from calendrier.views import EventViewset
 from documents.views import CategoryDocumentViewSet
 from documents.views import DocumentViewSet
 
+from galerie.views import Category_Galerie_ListView, Category_Galerie_DetailView, Image_Galerie_ListView, Image_Galerie_DetailView, Category_Galerie_ViewSet, \
+    Image_Galerie_ViewSet
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Intranet-Silva-Medical API",
@@ -33,14 +36,17 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 
-router.register('Article_Category', CategorysViewset)
-router.register('article', ArticlesViewset)
+router.register('Blog Categorie', CategorysViewset)
+router.register('Blog Article', ArticlesViewset)
 
-router.register('calendrier', CalendarysViewset)
-router.register('event', EventViewset)
+router.register('EventManager Calendrier ', CalendarysViewset)
+router.register('EventManager Event', EventViewset)
 
-router.register('Document_Category', CategoryDocumentViewSet)
-router.register('Document', DocumentViewSet)
+router.register('FileManager Categorie', CategoryDocumentViewSet)
+router.register('FileManager File', DocumentViewSet)
+
+router.register('Galerie Categorie', Category_Galerie_ViewSet)
+router.register('Galerie Image', Image_Galerie_ViewSet)
 
 urlpatterns = [
                   path('admin/', admin.site.urls),

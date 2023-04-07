@@ -1,13 +1,13 @@
 from rest_framework import viewsets, views, status
 from rest_framework.response import Response
 
-from .models import Category, Document
+from .models import Category_FileManager, Document
 from .serializers import CategoryDocumentSerializer, DocumentSerializer
 
 
 class CategoryDocumentViewSet(viewsets.ModelViewSet):
     serializer_class = CategoryDocumentSerializer
-    queryset = Category.objects.all()
+    queryset = Category_FileManager.objects.all()
 
 
 class DocumentViewSet(viewsets.ModelViewSet):

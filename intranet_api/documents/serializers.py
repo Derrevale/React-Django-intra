@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Document
+from .models import Category_FileManager, Document
 
 
 class CategoryDocumentSerializer(serializers.ModelSerializer):
@@ -7,7 +7,7 @@ class CategoryDocumentSerializer(serializers.ModelSerializer):
     files = serializers.SerializerMethodField()
 
     class Meta:
-        model = Category
+        model = Category_FileManager
         fields = ('id', 'name', 'parent', 'children', 'files')
         depth = 1
 

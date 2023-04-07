@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Document
+from .models import Category_FileManager, Document
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent',)
@@ -11,5 +11,5 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description',)
     exclude = ('name',)
 
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Category_FileManager, CategoryAdmin)
 admin.site.register(Document, DocumentAdmin)
