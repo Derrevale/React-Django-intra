@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import Topbar from "./Topbar";
-import CalendarEvent from "./Calendar/CalendarEvent";
 
 
 import {
@@ -20,6 +19,8 @@ import Documents from "./Documents/Documents";
 import Gallery from "./Galery/Galery";
 import FileImports from "./Documents/FileImports";
 import SearchResult from "./Search/SearchResult";
+import CalendarEvent from "./Calendar/CalendarEvent";
+
 function App() {
 
     const router = createBrowserRouter(

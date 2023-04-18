@@ -14,7 +14,7 @@ class Category_GalerieAdmin(admin.ModelAdmin):
 
 
 class Image_GalerieAdmin(admin.ModelAdmin):
-    list_display = ('category', 'image')
+    list_display = ('name','category', 'image')
 
 
 admin.site.register(Category_Galerie, Category_GalerieAdmin)

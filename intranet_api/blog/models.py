@@ -1,7 +1,8 @@
 from ckeditor.fields import RichTextField
 from django.db import models
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 from django.conf import settings
 import os
 
@@ -21,6 +22,12 @@ class Category_Blog(models.Model):
         verbose_name = 'Category'
         # Nom humain du pluriel de la classe pour l'interface d'administration de Django
         verbose_name_plural = 'Categories'
+
+# Signal handler to generate a unique slug before saving a Category_Blog
+@receiver(pre_save, sender=Category_Blog)
+def create_unique_slug(sender, instance, **kwargs):
+    if not instance.slug:
+        instance.slug = slugify(instance.name)
 
 # Classe qui représente un article de blog dans la base de données
 class Article_Blog(models.Model):
