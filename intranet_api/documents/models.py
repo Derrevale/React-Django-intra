@@ -1,6 +1,8 @@
 import os
+
 from django.db import models
 from django.dispatch import receiver
+
 from intranet_core.settings import logger
 
 
@@ -39,6 +41,27 @@ class Document(models.Model):
             return self.name
         else:
             return f"Document {self.id}"
+
+    def save(self, *args, **kwargs):
+        """
+        Saves the document and launches the process if needed.
+        """
+
+        # Performs the save
+        super().save(*args, **kwargs)
+
+        # Checks if the document needs to be processed
+        if not self.processed:
+            try:
+                import documents.services as services
+                # If so, process it
+                services.silva_search_service.process(self)
+                # Mark it as processed
+                self.processed = True
+                # Save it
+                super().save(*args, **kwargs)
+            except Exception as e:
+                logger.error(f'Error while processing document {self.name}: {e}')
 
     def get_filename(self):
         """
