@@ -14,12 +14,17 @@ import {
 } from "react-router-dom";
 import ArticleList from "./Blog/ArticleList";
 import Article from "./Blog/Article";
+
 import AddEventForm from "./Formulaire/EventForm";
 import Documents from "./Documents/Documents";
-import Gallery from "./Galery/Galery";
 import FileImports from "./Documents/FileImports";
+
 import SearchResult from "./Search/SearchResult";
+
 import CalendarEvent from "./Calendar/CalendarEvent";
+
+import CategoryList from "./Galery/CategoryList";
+import CategoryDetail from "./Galery/CategoryDetail";
 
 function App() {
 
@@ -36,7 +41,8 @@ function App() {
                 <Route path="/articlelist" element={<ArticleList/>}/>
                 <Route path="/articles/:id" element={<Article/>}/>
                 <Route path="/documents" element={<Documents/>}/>
-                <Route path="/Galerie" element={<Gallery/>}/>
+                <Route path="/CategoryList" element={<CategoryList/>}/>
+                <Route path="/category/:categoryId" element={<CategoryDetail/>}/>
                 <Route element={<Navbar/>}/>
             </Route>
         )
