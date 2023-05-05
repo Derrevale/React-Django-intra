@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Grid, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
+import '../../styles/Galerie/CategoryList.css';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -20,18 +21,18 @@ const CategoryList = () => {
   }, []);
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={4} className="CategoryList">
       {categories.map((category) => (
         <Grid item key={category.id} xs={12} sm={6} md={4}>
-          <Link to={`/category/${category.id}`} style={{ textDecoration: 'none' }}>
+          <Link to={`/Galerie/${category.id}`} style={{ textDecoration: 'none' }}>
             <Card>
               <CardActionArea>
-                {category.illustration_image && (
+                {category.image && (
                   <CardMedia
+                    className="card-media" // Ajouter la classe CSS ici
                     component="img"
                     alt={category.name}
-                    height="140"
-                    image={category.illustration_image.image}
+                    image={category.image}
                   />
                 )}
                 <CardContent>
