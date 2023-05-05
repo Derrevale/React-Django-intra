@@ -1,17 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Navbar from "./Navbar";
 import Topbar from "./Topbar";
 
 
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-    Link,
-    Outlet,
-    RouterProvider,
-    useParams
-} from "react-router-dom";
+import {createBrowserRouter, createRoutesFromElements, Outlet, Route, RouterProvider} from "react-router-dom";
 import ArticleList from "./Blog/ArticleList";
 import Article from "./Blog/Article";
 
@@ -25,6 +17,7 @@ import CalendarEvent from "./Calendar/CalendarEvent";
 
 import CategoryList from "./Galery/CategoryList";
 import CategoryDetail from "./Galery/CategoryDetail";
+import Login from "./Authentication/Login";
 
 function App() {
 
@@ -43,6 +36,9 @@ function App() {
                 <Route path="/documents" element={<Documents/>}/>
                 <Route path="/CategoryList" element={<CategoryList/>}/>
                 <Route path="/category/:categoryId" element={<CategoryDetail/>}/>
+
+                <Route path="/login" element={<Login/>}/>
+
                 <Route element={<Navbar/>}/>
             </Route>
         )

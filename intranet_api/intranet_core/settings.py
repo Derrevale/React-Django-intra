@@ -13,7 +13,9 @@ import logging
 import os
 from pathlib import Path
 
+import ldap
 from django.conf import settings
+from django_auth_ldap.config import LDAPSearch, ActiveDirectoryGroupType
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,14 +143,63 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# logging
+# Logging
 logger = logging.getLogger('intranet_api')
 logger.addHandler(logging.StreamHandler())
+
 # Set the default level
 if settings.DEBUG:
     logger.setLevel(logging.DEBUG)
 else:
     logger.setLevel(logging.INFO)
+
+# LDAP Authentication
+AUTH_LDAP_SERVER_URI = 'ldap://10.1.0.80:389'
+AUTH_LDAP_BIND_DN = 'cn=Administrator,cn=Users,dc=SILVA,dc=LAN'
+AUTH_LDAP_BIND_PASSWORD = 'anointer-parade-aptly-refutable'
+
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=SILVA,dc=silva,dc=lan",
+                                   ldap.SCOPE_SUBTREE,
+                                   "sAMAccountName=%(user)s")
+
+AUTH_LDAP_USER_ATTR_MAP = {
+    'username': 'sAMAccountName',
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    "dc=SILVA,dc=LAN",
+    ldap.SCOPE_SUBTREE,
+    "(objectCategory=Group)",
+)
+AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType(name_attr="cn")
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_active": 'CN=Administrateurs IT,OU=SILVA,DC=silva,DC=lan',
+    "is_staff": 'CN=Administrateurs IT,OU=SILVA,DC=silva,DC=lan',
+    "is_superuser": 'CN=Administrateurs IT,OU=SILVA,DC=silva,DC=lan',
+}
+
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_CACHE_GROUPS = True
+
+AUTHENTICATION_BACKENDS = (
+    "django_auth_ldap.backend.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+AUTH_LDAP_CONNECTION_OPTIONS = {
+    ldap.OPT_X_TLS_REQUIRE_CERT: False,
+    ldap.OPT_REFERRALS: 0
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 # OCR Search configuration
 SILVA_SEARCH_PROCESS_URL = "http://localhost:8001/process"
