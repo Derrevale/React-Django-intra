@@ -16,6 +16,7 @@ const Login = () => {
             });
 
             localStorage.setItem('access', response.data.access);
+            console.log("connecter");
             localStorage.setItem('refresh', response.data.refresh);
 
             axios.defaults.headers['Authorization'] = 'Bearer ' + localStorage.getItem('access');

@@ -26,6 +26,8 @@ import CalendarEvent from "./Calendar/CalendarEvent";
 import CategoryList from "./Galery/CategoryList";
 import CategoryDetail from "./Galery/CategoryDetail";
 
+import Login from "./Authentication/Login";
+
 function App() {
 
     const router = createBrowserRouter(
@@ -34,6 +36,7 @@ function App() {
                 <Route index element={<ArticleList/>}/>
                 <Route path="/calendrier/:id" element={<CalendarEvent/>}/>
 
+                <Route path="/login" element={<Login/>}/>
                 <Route path="/eventform" element={<AddEventForm/>}/>
                 <Route path="/fileimport" element={<FileImports/>}/>
                 <Route path="/search" element={<SearchResult/>}/>

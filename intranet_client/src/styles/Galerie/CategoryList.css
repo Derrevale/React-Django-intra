@@ -1,0 +1,8 @@
+.CategoryList {
+  margin-top: 0% !important;
+}
+
+.CategoryList .card-media {
+  height: 25%; /* Vous pouvez ajuster cette valeur en fonction de vos préférences */
+  width: 100%; /* Vous pouvez ajuster cette valeur en fonction de vos préférences */
+}
