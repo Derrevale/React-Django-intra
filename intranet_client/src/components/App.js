@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import Topbar from "./Topbar";
-
+import { Button } from 'react-bootstrap';
+import OffcanvasRight from './OffcanvasRight';
 
 import {
     createBrowserRouter,
@@ -30,9 +31,14 @@ import Login from "./Authentication/Login";
 
 function App() {
 
+    const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+    const handleClose = () => setShowOffcanvas(false);
+    const handleShow = () => setShowOffcanvas(true);
+
     const router = createBrowserRouter(
         createRoutesFromElements(
-            <Route path="/" element={<Root/>}>
+            <Route path="/" element={<Root handleShow={handleShow}/>}>
                 <Route index element={<ArticleList/>}/>
                 <Route path="/calendrier/:id" element={<CalendarEvent/>}/>
 
@@ -43,10 +49,11 @@ function App() {
 
                 <Route path="/articlelist" element={<ArticleList/>}/>
                 <Route path="/articles/:id" element={<Article/>}/>
+
                 <Route path="/documents" element={<Documents/>}/>
+
                 <Route path="/Galerie" element={<CategoryList/>}/>
                 <Route path="/Galerie/:categoryId" element={<CategoryDetail/>}/>
-                <Route element={<Navbar/>}/>
             </Route>
         )
     );
@@ -55,16 +62,18 @@ function App() {
     return (
         <div className="App">
             <Topbar/>
-            <Navbar/>
+
+            <OffcanvasRight show={showOffcanvas} handleClose={handleClose} />
+
             <RouterProvider router={router}/>
         </div>
     );
 }
 
-const Root = () => {
+const Root = ({handleShow}) => {
     return (
         <>
-
+            <Navbar handleShow={handleShow}/>
             <div className="container">
                 <Outlet/>
             </div>

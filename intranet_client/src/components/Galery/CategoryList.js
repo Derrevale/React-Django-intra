@@ -20,19 +20,22 @@ const CategoryList = () => {
     fetchCategories();
   }, []);
 
+  // Filtrer les catégories sans parent (parent_category === null)
+  const noParentCategories = categories.filter(category => category.parent_category === null);
+
   return (
     <Grid container spacing={4} className="CategoryList">
-      {categories.map((category) => (
-        <Grid item key={category.id} xs={12} sm={6} md={4}>
+      {noParentCategories.map((category) => (
+        <Grid item key={category.id} xs={12} sm={6} md={4} className="CategoryList2">
           <Link to={`/Galerie/${category.id}`} style={{ textDecoration: 'none' }}>
-            <Card>
-              <CardActionArea>
+            <Card className="CategoryList3">
+              <CardActionArea className="CategoryList4">
                 {category.image && (
                   <CardMedia
-                    className="card-media" // Ajouter la classe CSS ici
                     component="img"
                     alt={category.name}
                     image={category.image}
+                    className="Img_Cadre"
                   />
                 )}
                 <CardContent>

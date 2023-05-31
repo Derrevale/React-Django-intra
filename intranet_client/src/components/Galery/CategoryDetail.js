@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { Grid, Card, CardActionArea, CardMedia, CardContent, Typography, ImageList, ImageListItem } from '@mui/material';
+import '../../styles/Galerie/CategoryList.css';
 
 const CategoryDetail = () => {
   const { categoryId } = useParams();

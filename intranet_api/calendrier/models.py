@@ -1,3 +1,4 @@
+import pytz
 from ckeditor.fields import RichTextField
 from django.db import models
 from dateutil.rrule import *
@@ -46,6 +47,7 @@ class Event(models.Model):
             (3, 'DAILY'),
         ]
         self.rrule = "FREQ={};DTSTART={};INTERVAL={};COUNT={}".format(
-            choice[self.frequency][1], self.Debut.strftime("%Y%m%dT%H%M%S"), self.interval, self.count
+            choice[self.frequency][1], self.Debut.astimezone(pytz.UTC).strftime("%Y%m%dT%H%M%S"), self.interval,
+            self.count
         )
         super().save(*args, **kwargs)

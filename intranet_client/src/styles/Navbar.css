@@ -7,7 +7,6 @@
 
 .header_menu {
     width: 100%;
-
     height: 100%;
     border-bottom: solid;
     border-bottom-color: rgb(17, 157, 174);
@@ -83,5 +82,31 @@
     display: inline-block;
     box-sizing: content-box;
     margin-top: 14px;
-    margin-left: 5px ;
+    margin-left: 5px;
+}
+
+.btn-burger {
+    padding: none !important;
+    background-color: transparent !important;
+    color: white !important;
+    cursor: pointer !important;
+    border: none !important;
+    display: inline-block !important;
+    line-height: 450% !important;
+}
+
+
+.fa-bars {
+    color: black;
+}
+
+.sp-menu-item.burger-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-link:focus, .btn-link:active {
+    background-color: transparent;
+    box-shadow: none;
 }

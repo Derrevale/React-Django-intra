@@ -1,6 +1,7 @@
+import React, { useState, useEffect } from 'react';
 import '../styles/Navbar.css';
 import '../styles/bootstrap.min.css';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
     faCalendar,
@@ -11,13 +12,13 @@ import {
     faSearch,
     faBars,
 } from '@fortawesome/free-solid-svg-icons';
-import {useState, useEffect} from 'react';
 import axios from 'axios';
 
-function Navbar() {
+function Navbar({ handleShow }) {
     const [showDropdown, setShowDropdown] = useState(false);
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+
     const handleChange = (event) => {
         setSearchQuery(event.target.value);
     };
@@ -26,6 +27,7 @@ function Navbar() {
         event.preventDefault();
         window.location.href = `/search?q=${searchQuery}`;
     };
+
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
     };
@@ -59,7 +61,6 @@ function Navbar() {
                                 </div>
                             </div>
                         </div>
-
                         <div className="header_menu col flex-auto">
                             <div className="sp-column d-flex justify-content-end align-items-center">
                                 <nav className="sp-megamenu-wrapper d-flex" role="navigation">
@@ -112,7 +113,7 @@ function Navbar() {
                                                                  className="fa-facebook"></FontAwesomeIcon> Galerie
                                             </a>
                                         </li>
-                                        <li className="sp-menu-item">
+                                        <li className="sp-menu-item search-item">
                                             <form className="center-align" onSubmit={handleSubmit}>
                                                 <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
                                                 <input
@@ -124,45 +125,22 @@ function Navbar() {
                                                 />
                                             </form>
                                         </li>
-                                        <li className="sp-menu-item d-lg-none">
+                                        <li className="sp-menu-item burger-icon">
                                             <button
-                                                className="btn btn-link text-white"
+                                                className="btn btn-link text-white  btn-burger"
                                                 type="button"
                                                 data-bs-toggle="offcanvas"
                                                 data-bs-target="#offcanvasExample"
                                                 aria-controls="offcanvasExample"
+                                                onClick={handleShow}
                                             >
-                                                <FontAwesomeIcon icon={faBars} className="fa-bars" size="xl"/>
+                                                <FontAwesomeIcon icon={faBars} className="fa-bars" size="xl" />
                                             </button>
                                         </li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                className="offcanvas offcanvas-start"
-                tabIndex="-1"
-                id="offcanvasExample"
-                aria-labelledby="offcanvasExampleLabel"
-            >
-                <div className="offcanvas-header">
-                    <h5 className="offcanvas-title" id="offcanvasExampleLabel">
-                        Off-canvas
-                    </h5>
-                    <button
-                        type="button"
-                        className="btn-close text-reset"
-                        data-bs-dismiss="offcanvas"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div className="offcanvas-body">
-                    <div>
-                        <p>Contenu off-canvas...</p>
-                        {/* Vous pouvez ajouter ici le contenu de votre off-canvas */}
                     </div>
                 </div>
             </div>
