@@ -64,14 +64,14 @@ function Navbar({ handleShow }) {
                         <div className="header_menu col flex-auto">
                             <div className="sp-column d-flex justify-content-end align-items-center">
                                 <nav className="sp-megamenu-wrapper d-flex" role="navigation">
-                                    <ul className="sp-megamenu-parent menu-animation-fade-up d-none d-lg-block">
-                                        <li className="sp-menu-item">
+                                    <ul className="sp-megamenu-parent menu-animation-fade-up">
+                                        <li className="sp-menu-item d-none d-lg-block">
                                             <a href="/">
                                                 <FontAwesomeIcon icon={faHome}
                                                                  className="fa-facebook"></FontAwesomeIcon> Home
                                             </a>
                                         </li>
-                                        <li className="sp-menu-item">
+                                        <li className="sp-menu-item d-none d-lg-block">
                                             <a onClick={toggleDropdown}>
                                                 <FontAwesomeIcon icon={faCalendar}
                                                                  className="fa-facebook"></FontAwesomeIcon>{' '}
@@ -89,31 +89,31 @@ function Navbar({ handleShow }) {
                                                 </div>
                                             )}
                                         </li>
-                                        <li className="sp-menu-item">
+                                        <li className="sp-menu-item d-none d-lg-block">
                                             <a href="/Documents">
                                                 <FontAwesomeIcon icon={faFile}
                                                                  className="fa-facebook"></FontAwesomeIcon> Documents
                                             </a>
                                         </li>
-                                        <li className="sp-menu-item">
+                                        <li className="sp-menu-item d-none d-lg-block">
                                             <a href="https://silvamedic.lms.sapsf.eu/learning/user/personal/viewPersonalHome.do?OWASP_CSRFTOKEN=TYES-8K4D-BBIC-5MJF-NGI7-HOD8-DQYQ-Z6U0">
                                                 <FontAwesomeIcon icon={faBook}
                                                                  className="fa-facebook"></FontAwesomeIcon> Formation
                                             </a>
                                         </li>
-                                        <li className="sp-menu-item">
+                                        <li className="sp-menu-item d-none d-lg-block">
                                             <a href="https://hcm55.sapsf.eu/sf/careers/jobsearch?bplte_company=silvamedic">
                                                 <FontAwesomeIcon icon={faIdBadge}
                                                                  className="fa-facebook"></FontAwesomeIcon> Carrière
                                             </a>
                                         </li>
-                                        <li className="sp-menu-item">
+                                        <li className="sp-menu-item d-none d-lg-block">
                                             <a href="/Galerie">
                                                 <FontAwesomeIcon icon={faImages}
                                                                  className="fa-facebook"></FontAwesomeIcon> Galerie
                                             </a>
                                         </li>
-                                        <li className="sp-menu-item search-item">
+                                        <li className="sp-menu-item search-item d-none d-lg-block">
                                             <form className="center-align" onSubmit={handleSubmit}>
                                                 <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
                                                 <input

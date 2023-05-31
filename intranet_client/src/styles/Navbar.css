@@ -86,7 +86,7 @@
 }
 
 .btn-burger {
-    padding: none !important;
+    padding: 8px !important;
     background-color: transparent !important;
     color: white !important;
     cursor: pointer !important;
