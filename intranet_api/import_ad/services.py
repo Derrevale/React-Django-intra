@@ -153,7 +153,8 @@ def import_ldap_users() -> dict:
             # Increment the error counter
             errors += 1
 
-    logger.info(f'Imported {counter} users with {errors} errors in {time.time() - start_time} seconds.')
+    logger.info(
+        f'Imported {counter + already_existing} users with {errors} errors in {time.time() - start_time} seconds.')
 
     return {
         'imported_users': counter,
