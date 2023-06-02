@@ -13,8 +13,8 @@ from rest_framework_simplejwt.views import (
 )
 
 import documents.views
-from blog.views import ArticlesViewset
-from blog.views import CategorysViewset
+from blog.views import ArticlesViewSet
+from blog.views import CategoriesViewSet
 from calendrier.views import CalendarysViewset
 from calendrier.views import EventViewset
 from documents.views import CategoryDocumentViewSet
@@ -46,8 +46,8 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 
-router.register('Blog Categorie', CategorysViewset)
-router.register('Blog Article', ArticlesViewset)
+router.register('Blog Categorie', CategoriesViewSet)
+router.register('Blog Article', ArticlesViewSet)
 
 router.register('EventManager Calendrier ', CalendarysViewset)
 router.register('EventManager Event', EventViewset)
