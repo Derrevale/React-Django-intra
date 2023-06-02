@@ -12,6 +12,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+import blog
 import documents.views
 import import_ad.views
 from blog.views import ArticlesViewSet
@@ -68,13 +69,23 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   # API
                   path('api/', include(router.urls)),
+
+                  # Media
+                  path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+
+                  # Search documents
+                  path('api/documents/search/', documents.views.SearchView.as_view(), name='search'),
+
+                  # Search blog
+                  path('api/blog/search/', blog.views.SearchBlogView.as_view(), name='search_blog'),
+
+                  # Import from Active Directory
+                  path('api/users/import/', import_ad.views.ActiveDirectoryView.as_view(), name='ad_import'),
+                  # Search users
+                  path('api/users/search/', import_ad.views.SearchUserView.as_view(), name='search_user'),
+
                   # Documentation
                   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
                   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-                  # Media
-                  path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
-                  # Search
-                  path('api/search/', documents.views.SearchView.as_view(), name='search'),
-                  # Import from Active Directory
-                  path('api/ad_import/', import_ad.views.ActiveDirectoryView.as_view(), name='ad_import'),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

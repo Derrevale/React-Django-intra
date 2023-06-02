@@ -1,5 +1,6 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, views, status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from .models import Article_Blog
 from .models import Category_Blog
@@ -23,3 +24,37 @@ class ArticlesViewSet(viewsets.ModelViewSet):
     queryset = Article_Blog.objects.all()
     pagination_class = BlogArticlePagination  # Add this line
     tags = ['Blog - Article']
+
+
+class SearchBlogView(views.APIView):
+    """
+    Search blog articles.
+    """
+
+    QUERY_PARAM = 'q'
+
+    def __init__(self):
+        """
+        Constructor.
+        """
+
+        # Call the parent constructor.
+        super().__init__()
+        # Set the serializer class.
+        self.serializer_class = ArticleSerializer
+
+    def get(self, request):
+        """
+        Handles GET requests.
+        :param request: the request.
+        """
+
+        if self.QUERY_PARAM not in request.query_params:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        # Search on the documents
+        articles = Article_Blog.objects.filter(content__icontains=request.GET.get(self.QUERY_PARAM))
+        # Serialize the found documents
+        serialized_articles = self.serializer_class(articles, many=True).data
+
+        return Response(serialized_articles)

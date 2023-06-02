@@ -47,6 +47,10 @@ class SearchView(views.APIView):
         if self.QUERY_PARAM not in request.query_params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        # Search on the documents
         documents = self.search_service.search(request.GET.get(self.QUERY_PARAM))
+        # Serialize the found documents
+        serialized_documents = self.serializer_class(documents, many=True).data
 
-        return Response(self.serializer_class(documents, many=True).data)
+        return Response(serialized_documents)
+
