@@ -13,6 +13,7 @@ from rest_framework_simplejwt.views import (
 )
 
 import documents.views
+import import_ad.views
 from blog.views import ArticlesViewSet
 from blog.views import CategoriesViewSet
 from calendrier.views import CalendarysViewset
@@ -74,4 +75,6 @@ urlpatterns = [
                   path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
                   # Search
                   path('api/search/', documents.views.SearchView.as_view(), name='search'),
+                  # Import from Active Directory
+                  path('api/ad_import/', import_ad.views.ActiveDirectoryView.as_view(), name='ad_import'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
