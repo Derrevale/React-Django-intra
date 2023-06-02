@@ -129,7 +129,7 @@ def import_ldap_users() -> dict:
             # Check if the user has a phone number
             if 'telephoneNumber' in ad_user.entry_attributes_as_dict:
                 # If so, set it
-                user.phone = ad_user.phoneNumber.value
+                user.phone = ad_user.telephoneNumber.value
 
             # Set a dummy default password (will not be used for authentication but is mandatory in the database)
             user.set_password(f'silva_{ad_user.sAMAccountName.value}')
