@@ -98,11 +98,8 @@ def import_ldap_users() -> dict:
         try:
             # Check if the user already exists in the Silva database
             user = find_user(ad_user.sAMAccountName.value)
-            if user:
-                # The user already exists in the Silva database
-                logger.info(f'User {ad_user.sAMAccountName.value} already exists in the database.')
-                already_existing += 1
-                continue
+            # Initialize the is_new flag
+            is_new = True
 
             # Check if the entry is a valid user
             if not is_entry_a_valid_user(ad_user):
@@ -111,19 +108,26 @@ def import_ldap_users() -> dict:
                 invalid += 1
                 continue
 
+            if user:
+                # The user already exists in the Silva database
+                logger.info(f'User {ad_user.sAMAccountName.value} already exists in the database.')
+                is_new = False
+            else:
+                # The user does not exist in the Silva database
+                user = SilvaUser()
+
             # Create the user in the Silva database
-            user = SilvaUser(
-                username=ad_user.sAMAccountName.value,
-                first_name=ad_user.givenName.value,
-                last_name=ad_user.sn.value,
-                email=ad_user.mail.value,
-                is_staff=False,
-                is_superuser=False,
-                is_active=True,
-            )
+            user.username = ad_user.sAMAccountName.value
+            user.first_name = ad_user.givenName.value
+            user.last_name = ad_user.sn.value
+            user.email = ad_user.mail.value
+            user.is_staff = False
+            user.is_superuser = False
+            user.is_active = True
+            user.site = ad_user.st.value
 
             # Check if the user has a phone number
-            if 'phoneNumber' in ad_user.entry_attributes_as_dict:
+            if 'telephoneNumber' in ad_user.entry_attributes_as_dict:
                 # If so, set it
                 user.phone = ad_user.phoneNumber.value
 
@@ -133,10 +137,16 @@ def import_ldap_users() -> dict:
             # Save the user
             user.save()
 
-            logger.info(f'User {ad_user.sAMAccountName.value} created in the database.')
-
-            # Increment the counter
-            counter += 1
+            if is_new:
+                # Log the creation
+                logger.info(f'User {ad_user.sAMAccountName.value} created in the database.')
+                # Increment the counter
+                counter += 1
+            else:
+                # Log the update
+                logger.info(f'User {ad_user.sAMAccountName.value} updated in the database.')
+                # Increment the counter
+                already_existing += 1
         except Exception as e:
             # Log the error
             logger.error(f'Error while importing user {ad_user.sAMAccountName}: {e}')

@@ -9,7 +9,7 @@ class ActiveDirectoryView(APIView):
     """
 
     # Only admins can import users from Active Directory
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
 
     @staticmethod
     def get(request, format=None):
