@@ -46,10 +46,10 @@ INSTALLED_APPS = [
     'galerie',
     'documents',
     'calendrier',
-
-    'colorfield',
+    'import_ad',
 
     # 3rd party
+    'colorfield',
     'ckeditor',
 
     'rest_framework',

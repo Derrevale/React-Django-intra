@@ -1,10 +1,16 @@
-from django.shortcuts import render
 from .models import Category_Blog
 from .models import Article_Blog
 from .serializers import CategorySerializer
 from .serializers import ArticleSerializer
 
 from rest_framework import viewsets
+from rest_framework import viewsets
+
+from .models import Article_Blog
+from .models import Category_Blog
+from .serializers import ArticleSerializer
+from .serializers import CategorySerializer
+
 
 # Importez les modèles de catégorie et d'article de blog, ainsi que les sérialiseurs associés.
 
@@ -17,6 +23,7 @@ class CategorysViewset(viewsets.ModelViewSet):
     queryset = Category_Blog.objects.all()
     # Ajoutez une liste de tags pour faciliter la compréhension et l'organisation de cette vue.
     tags = ['Blog - Category']
+
 
 # Créez une classe ArticlesViewset qui hérite de viewsets.ModelViewSet.
 # Cette classe gère les vues de l'API pour les articles de blog.
