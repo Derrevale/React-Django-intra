@@ -1,5 +1,4 @@
-from rest_framework import viewsets, views, status
-from rest_framework.decorators import action
+from rest_framework import views, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -15,7 +14,7 @@ class BlogArticlePagination(PageNumberPagination):
     page_size = 12  # Or any number you prefer
 
 
-class CategoryBlogAPIView(views.APIView):
+class CategoryBlogListAPIView(views.APIView):
     """
     CategoryBlog API View.
     """
@@ -83,35 +82,54 @@ class CategoryBlogDetailsAPIView(views.APIView):
         return Response(serialized_category)
 
 
-class CategoriesViewSet(viewsets.ModelViewSet):
-    serializer_class = CategorySerializer
-    queryset = CategoryBlog.objects.all()
-    tags = ['Blog - Category']
+class ArticlesBlogListAPIView(views.APIView):
+    """
+    ArticleBlog API View.
+    """
 
-    @action(methods=['post'], detail=True)
-    def do_create(self, request, *args, **kwargs):
-        print(request)
-        pass
+    @staticmethod
+    def get(request):
+        """
+        Handles GET requests.
+        :param request: the request.
+        """
 
-    @action(methods=['put'], detail=True)
-    def do_update(self, request, *args, **kwargs):
-        print(request)
-        pass
+        # Get all the documents
+        articles = ArticleBlog.objects.all()
+        art_ids = [art.root_article.id for art in articles]
+        _root_articles = RootArticleBlog.objects.all()
+        root_articles = [art for art in _root_articles if art.id not in art_ids]
+        # Serialize the documents
+        serialized_articles = ArticleSerializer(articles, many=True).data
+        serialized_articles += ArticleSerializer(root_articles, many=True).data
+
+        return Response(serialized_articles)
 
 
-class ArticlesViewSet(viewsets.ModelViewSet):
-    serializer_class = ArticleSerializer
-    queryset = ArticleBlog.objects.all()
-    pagination_class = BlogArticlePagination  # Add this line
-    tags = ['Blog - Article']
+class ArticlesBlogDetailsAPIView(views.APIView):
+    """
+    ArticleBlog API View.
+    """
 
-    @action(methods=['post'], detail=True)
-    def do_create(self, request, *args, **kwargs):
-        pass
+    @staticmethod
+    def get(request, slug: str):
+        """
+        Handles GET requests.
+        :param request: the request.
+        :param slug: the slug of the article.
+        """
 
-    @action(methods=['put'], detail=True)
-    def do_update(self, request, *args, **kwargs):
-        pass
+        try:
+            article = ArticleBlog.objects.filter(slug=slug).first()
+        except ArticleBlog.DoesNotExist:
+            article = None
+
+        article = get_object_or_404(RootArticleBlog, slug=slug)
+
+        # Serialize the documents
+        serialized_article = ArticleSerializer(article).data
+
+        return Response(serialized_article)
 
 
 class SearchBlogView(views.APIView):
@@ -145,5 +163,6 @@ class SearchBlogView(views.APIView):
         root_articles = RootArticleBlog.objects.filter(content__icontains=request.GET.get(self.QUERY_PARAM))
         # Serialize the found documents
         serialized_articles = self.serializer_class(articles, many=True).data
+        serialized_articles += self.serializer_class(root_articles, many=True).data
 
         return Response(serialized_articles)

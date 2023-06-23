@@ -87,11 +87,11 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
     Deletes old file from filesystem when corresponding `Document` object is updated
     with new file.
     """
-    if not instance.pk:
+    if not instance.id:
         return False
 
     try:
-        old_file = Document.objects.get(pk=instance.pk).fileUrl
+        old_file = Document.objects.get(pk=instance.id).fileUrl
     except Document.DoesNotExist:
         return False
 

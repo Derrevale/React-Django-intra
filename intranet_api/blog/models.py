@@ -140,7 +140,7 @@ class RootArticleBlog(models.Model):
     # Heure de publication de l'article
     publication_time = models.DateTimeField(null=False)
     with_translations = models.BooleanField(default=True, verbose_name='With translations')
-    language = models.CharField(null=True, blank=True, max_length=2, choices=Languages.choices, default=Languages.FR,
+    language = models.CharField(null=True, max_length=2, choices=Languages.choices, default=Languages.FR,
                                 verbose_name='Language')
 
     def __str__(self):

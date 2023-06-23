@@ -49,9 +49,9 @@ def delete_category_files(sender, instance, **kwargs):
 
 @receiver(models.signals.pre_save, sender=Category_Galerie)
 def delete_category_illustration_file(sender, instance, **kwargs):
-    if instance.pk:
+    if instance.id:
         try:
-            old_category = Category_Galerie.objects.get(pk=instance.pk)
+            old_category = Category_Galerie.objects.get(pk=instance.id)
         except Category_Galerie.DoesNotExist:
             return
 
