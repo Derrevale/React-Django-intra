@@ -160,7 +160,9 @@ class SearchBlogView(views.APIView):
 
         # Search on the documents
         articles = ArticleBlog.objects.filter(content__icontains=request.GET.get(self.QUERY_PARAM))
-        root_articles = RootArticleBlog.objects.filter(content__icontains=request.GET.get(self.QUERY_PARAM))
+        art_ids = [art.root_article.id for art in articles]
+        _root_articles = RootArticleBlog.objects.filter(content__icontains=request.GET.get(self.QUERY_PARAM))
+        root_articles = [art for art in _root_articles if art.id not in art_ids]
         # Serialize the found documents
         serialized_articles = self.serializer_class(articles, many=True).data
         serialized_articles += self.serializer_class(root_articles, many=True).data
