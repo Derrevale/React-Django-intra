@@ -48,17 +48,17 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 
-router.register('Blog Categorie', CategoriesViewSet)
-router.register('Blog Article', ArticlesViewSet)
+router.register('blog/categories', CategoriesViewSet)
+router.register('blog/articles', ArticlesViewSet)
 
-router.register('EventManager Calendrier ', CalendarysViewset)
-router.register('EventManager Event', EventViewset)
+router.register('event/calendar', CalendarysViewset)
+router.register('event/events', EventViewset)
 
-router.register('FileManager Categorie', CategoryDocumentViewSet)
-router.register('FileManager File', DocumentViewSet)
+router.register('file/categories', CategoryDocumentViewSet)
+router.register('file/files', DocumentViewSet)
 
-router.register('Galerie Categorie', Category_Galerie_ViewSet)
-router.register('Galerie Image', Image_Galerie_ViewSet)
+router.register('gallery/categories', Category_Galerie_ViewSet)
+router.register('gallery/images', Image_Galerie_ViewSet)
 
 urlpatterns = [
                   # Authentication

@@ -1,16 +1,16 @@
-from .models import Category_Blog
-from .models import Article_Blog
+from .models import CategoryBlog
+from .models import ArticleBlog
 
 from rest_framework import serializers
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category_Blog
+        model = CategoryBlog
         fields = '__all__'
 
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Article_Blog
+        model = ArticleBlog
         fields = '__all__'

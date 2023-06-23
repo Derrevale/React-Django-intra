@@ -1,6 +1,8 @@
+import os
+
 from django.db import models
 from django.dispatch import receiver
-import os
+
 
 class Category_Galerie(models.Model):
     name = models.CharField(max_length=255)
@@ -19,7 +21,6 @@ class Category_Galerie(models.Model):
 
 
 class Image_Galerie(models.Model):
-
     category = models.ForeignKey(Category_Galerie, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='images/galerie/')
     name = models.CharField(max_length=255, blank=True, editable=False)
@@ -56,6 +57,7 @@ def delete_category_illustration_file(sender, instance, **kwargs):
 
         if old_category.illustration_image and old_category.illustration_image != instance.illustration_image:
             old_category.illustration_image.delete(False)
+
 
 # Ajout du signal pour supprimer les fichiers d'image lors de la suppression d'une instance de Image_Galerie
 @receiver(models.signals.pre_delete, sender=Image_Galerie)
