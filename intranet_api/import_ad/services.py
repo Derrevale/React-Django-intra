@@ -1,9 +1,12 @@
+import json
+import os
 import time
 from typing import Optional
 
 from ldap3 import Server, ALL, Connection, SUBTREE, ALL_ATTRIBUTES, Entry
 
 from import_ad.models import SilvaUser
+from intranet_core import settings
 
 ENTRY_KEYS = [
     'sAMAccountName',
@@ -54,6 +57,17 @@ def is_entry_a_valid_user(ldap_entry: Entry) -> bool:
     return is_valid
 
 
+def load_exclusion_list() -> list[str]:
+    file_path = os.path.join(settings.PROJECT_ROOT, '..', 'files', 'exclude-emails.json')
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            json_content = json.load(f)
+            if 'excludeEmails' in json_content:
+                return json_content.get('excludeEmails', [])
+
+    raise Exception('Could not load the exclusion list')
+
+
 def import_ldap_users() -> dict:
     """
     Import Active Directory users into the Silva database as SilvaUser entities.
@@ -82,76 +96,115 @@ def import_ldap_users() -> dict:
         logger.error(f'Error while binding to the Active Directory: {ad_connection.result}')
         raise Exception(ad_connection.result)
 
-    try:
-        # Perform the search
-        ad_connection.search(search_base='ou=SILVA,dc=silva,dc=lan',
-                             search_filter='(objectClass=user)',
-                             search_scope=SUBTREE,
-                             attributes=ALL_ATTRIBUTES,
-                             get_operational_attributes=True)
-    except Exception as e:
-        logger.error(f'Error while searching the Active Directory: {e}')
-        raise e
+    # Load the exclusion list
+    exclusion_list = load_exclusion_list()
 
-    # Loop on the results
-    for ad_user in ad_connection.entries:
+    # Some working variables
+    go_on = True
+    page = 0
+
+    while go_on:
         try:
-            # Check if the user already exists in the Silva database
-            user = find_user(ad_user.sAMAccountName.value)
-            # Initialize the is_new flag
-            is_new = True
-
-            # Check if the entry is a valid user
-            if not is_entry_a_valid_user(ad_user):
-                # The entry is not a valid user
-                logger.info(f'User {ad_user.sAMAccountName.value} is not a valid user. Skipping...')
-                invalid += 1
-                continue
-
-            if user:
-                # The user already exists in the Silva database
-                logger.info(f'User {ad_user.sAMAccountName.value} already exists in the database.')
-                is_new = False
+            if page == 0:
+                # Perform the search
+                ad_connection.search(search_base='ou=SILVA,dc=silva,dc=lan',
+                                     search_filter='(objectClass=user)',
+                                     search_scope=SUBTREE,
+                                     attributes=ALL_ATTRIBUTES,
+                                     get_operational_attributes=True)
             else:
-                # The user does not exist in the Silva database
-                user = SilvaUser()
+                # Perform the search
+                ad_connection.search(search_base='ou=SILVA,dc=silva,dc=lan',
+                                     search_filter='(objectClass=user)',
+                                     search_scope=SUBTREE,
+                                     attributes=ALL_ATTRIBUTES,
+                                     get_operational_attributes=True,
+                                     paged_size=page)
 
-            # Create the user in the Silva database
-            user.username = ad_user.sAMAccountName.value
-            user.first_name = ad_user.givenName.value
-            user.last_name = ad_user.sn.value
-            user.email = ad_user.mail.value
-            user.is_staff = False
-            user.is_superuser = False
-            user.is_active = True
-            user.site = ad_user.st.value
-
-            # Check if the user has a phone number
-            if 'telephoneNumber' in ad_user.entry_attributes_as_dict:
-                # If so, set it
-                user.phone = ad_user.telephoneNumber.value
-
-            # Set a dummy default password (will not be used for authentication but is mandatory in the database)
-            user.set_password(f'silva_{ad_user.sAMAccountName.value}')
-
-            # Save the user
-            user.save()
-
-            if is_new:
-                # Log the creation
-                logger.info(f'User {ad_user.sAMAccountName.value} created in the database.')
-                # Increment the counter
-                counter += 1
-            else:
-                # Log the update
-                logger.info(f'User {ad_user.sAMAccountName.value} updated in the database.')
-                # Increment the counter
-                already_existing += 1
+            # Increment the page counter
+            page += 1
         except Exception as e:
-            # Log the error
-            logger.error(f'Error while importing user {ad_user.sAMAccountName}: {e}')
-            # Increment the error counter
-            errors += 1
+            logger.error(f'Error while searching the Active Directory: {e}')
+            raise e
+
+        logger.info(f'Found {len(ad_connection.entries)} entries in the Active Directory.')
+
+        # Loop on the results
+        for ad_user in ad_connection.entries:
+
+            try:
+
+                if 'mail' not in ad_user.entry_attributes_as_dict:
+                    continue
+                if 'msExchUserAccountControl' in ad_user.entry_attributes_as_dict and ad_user.msExchUserAccountControl.value == 2:
+                    continue
+
+                # Check if the user is in the exclusion list
+                if 'mail' in ad_user.entry_attributes_as_dict and ad_user.mail.value in exclusion_list:
+                    logger.info(f'User {ad_user.sAMAccountName.value} is in the exclusion list. Skipping...')
+                    continue
+
+                # Check if the user already exists in the Silva database
+                user = find_user(ad_user.sAMAccountName.value)
+                # Initialize the is_new flag
+                is_new = True
+
+                # Check if the entry is a valid user
+                if not is_entry_a_valid_user(ad_user):
+                    # The entry is not a valid user
+                    logger.info(f'User {ad_user.sAMAccountName.value} is not a valid user. Skipping...')
+                    invalid += 1
+                    continue
+
+                if user:
+                    # The user already exists in the Silva database
+                    logger.info(f'User {ad_user.sAMAccountName.value} already exists in the database.')
+                    is_new = False
+                else:
+                    # The user does not exist in the Silva database
+                    user = SilvaUser()
+
+                # Create the user in the Silva database
+                user.username = ad_user.sAMAccountName.value
+                user.first_name = ad_user.givenName.value
+                user.last_name = ad_user.sn.value
+                user.email = ad_user.mail.value
+                user.is_staff = False
+                user.is_superuser = False
+                user.is_active = True
+                user.site = ad_user.st.value
+
+                # Check if the user has a phone number
+                if 'telephoneNumber' in ad_user.entry_attributes_as_dict:
+                    # If so, set it
+                    user.phone = ad_user.telephoneNumber.value
+
+                # Set a dummy default password (will not be used for authentication but is mandatory in the database)
+                user.set_password(f'silva_{ad_user.sAMAccountName.value}')
+
+                # Save the user
+                user.save()
+
+                if is_new:
+                    # Log the creation
+                    logger.info(f'User {ad_user.sAMAccountName.value} created in the database.')
+                    # Increment the counter
+                    counter += 1
+                else:
+                    # Log the update
+                    logger.info(f'User {ad_user.sAMAccountName.value} updated in the database.')
+                    # Increment the counter
+                    already_existing += 1
+            except Exception as e:
+                # Log the error
+                logger.error(f'Error while importing user {ad_user.sAMAccountName}: {e}')
+                # Increment the error counter
+                errors += 1
+
+        logger.info(f'{counter + already_existing} users processed so far...')
+
+        if len(ad_connection.entries) == 0:
+            go_on = False
 
     logger.info(
         f'Imported {counter + already_existing} users with {errors} errors in {time.time() - start_time} seconds.')
