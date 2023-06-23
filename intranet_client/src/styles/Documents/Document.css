@@ -1,3 +1,13 @@
 .MuiTreeItem-root{
     float: initial;
 }
+
+.MuiTreeItem-label{
+    text-align: left;
+    font-weight: bold !important;
+}
+
+.file{
+    color: #0d5aa7;
+    font-weight: normal;
+}

@@ -53,6 +53,7 @@ const Documents = () => {
                                     href={`http://localhost:8002${file.fileUrl}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    className="file"
                                 >
                                     {file.name}
                                 </a>

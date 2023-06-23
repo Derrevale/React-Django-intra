@@ -19,37 +19,37 @@ function OffcanvasRight({ show, handleClose }) {
       </Offcanvas.Header>
       <Offcanvas.Body>
         <ul>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <a href="/">
                     <FontAwesomeIcon icon={faHome} className="fa-facebook"></FontAwesomeIcon> Home
                 </a>
             </li>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <a href="/calendar">
                     <FontAwesomeIcon icon={faCalendar} className="fa-facebook"></FontAwesomeIcon> Calendrier
                 </a>
             </li>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <a href="/documents">
                     <FontAwesomeIcon icon={faFile} className="fa-facebook"></FontAwesomeIcon> Documents
                 </a>
             </li>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <a href="/formation">
                     <FontAwesomeIcon icon={faBook} className="fa-facebook"></FontAwesomeIcon> Formation
                 </a>
             </li>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <a href="/carrieres">
                     <FontAwesomeIcon icon={faIdBadge} className="fa-facebook"></FontAwesomeIcon> Carrière
                 </a>
             </li>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <a href="/galerie">
                     <FontAwesomeIcon icon={faImages} className="fa-facebook"></FontAwesomeIcon> Galerie
                 </a>
             </li>
-            <li className="sp-menu-item">
+            <li className="sp-menu-item" className="offcanvas">
                 <form className="center-align">
                     <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
                     <input

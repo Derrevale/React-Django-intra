@@ -18,42 +18,21 @@ ENTRY_KEYS = [
 
 
 def find_user(username: str) -> Optional[SilvaUser]:
-    """
-    Finds a user in the Silva database.
-    :param username: the username.
-    :return: the user if found, None otherwise.
-    """
-
-    # Import here to avoid circular imports (and runtime insults)
     from intranet_core.settings import logger
-
-    # Initialize some working variables
     user = None
-
-    # Try to find the user
     try:
         user = SilvaUser.objects.get(username=username)
     except SilvaUser.DoesNotExist:
         logger.info(f'User {username} not found in the Silva database.')
-
     return user
 
 
 def is_entry_a_valid_user(ldap_entry: Entry) -> bool:
-    """
-    Checks if an LDAP entry is a valid user.
-    """
-
-    # Import here to avoid circular imports (and runtime insults)
-
-    # Initialize some working variables
     is_valid = True
-
     for key in ENTRY_KEYS:
         if key not in ldap_entry.entry_attributes_as_dict:
             is_valid = False
             break
-
     return is_valid
 
 
@@ -64,75 +43,51 @@ def load_exclusion_list() -> list[str]:
             json_content = json.load(f)
             if 'excludeEmails' in json_content:
                 return json_content.get('excludeEmails', [])
-
     raise Exception('Could not load the exclusion list')
 
 
 def import_ldap_users() -> dict:
-    """
-    Import Active Directory users into the Silva database as SilvaUser entities.
-
-    :return: counters and errors.
-    """
-
-    # Import here to avoid circular imports (and runtime insults)
     from intranet_core.settings import logger
     from intranet_core import settings
 
-    # Initialize some working variables
     start_time = time.time()
     counter = 0
     invalid = 0
     already_existing = 0
     errors = 0
 
-    # Connect to the Activer Directory
+    # Initialize processed_users as a set
+    processed_users = set()
+
     ad_server = Server(settings.AUTH_LDAP_SERVER_URI, use_ssl=False, get_info=ALL)
     ad_connection = Connection(ad_server, user=settings.AUTH_LDAP_BIND_DN,
                                password=settings.AUTH_LDAP_BIND_PASSWORD, auto_bind='DEFAULT')
 
-    # Bind the connection
     if not ad_connection.bind():
         logger.error(f'Error while binding to the Active Directory: {ad_connection.result}')
         raise Exception(ad_connection.result)
 
-    # Load the exclusion list
     exclusion_list = load_exclusion_list()
+    page_size = 100
+    cookie = None
+    total_entries = 0
 
-    # Some working variables
-    go_on = True
-    page = 0
+    while True:
+        ad_connection.search(search_base='ou=SILVA,dc=silva,dc=lan',
+                             search_filter='(objectClass=user)',
+                             search_scope=SUBTREE,
+                             attributes=ALL_ATTRIBUTES,
+                             paged_size=page_size,
+                             paged_cookie=cookie)
 
-    while go_on:
-        try:
-            if page == 0:
-                # Perform the search
-                ad_connection.search(search_base='ou=SILVA,dc=silva,dc=lan',
-                                     search_filter='(objectClass=user)',
-                                     search_scope=SUBTREE,
-                                     attributes=ALL_ATTRIBUTES,
-                                     get_operational_attributes=True)
-            else:
-                # Perform the search
-                ad_connection.search(search_base='ou=SILVA,dc=silva,dc=lan',
-                                     search_filter='(objectClass=user)',
-                                     search_scope=SUBTREE,
-                                     attributes=ALL_ATTRIBUTES,
-                                     get_operational_attributes=True,
-                                     paged_size=page)
-
-            # Increment the page counter
-            page += 1
-        except Exception as e:
-            logger.error(f'Error while searching the Active Directory: {e}')
-            raise e
-
-        logger.info(f'Found {len(ad_connection.entries)} entries in the Active Directory.')
+        total_entries += len(ad_connection.response)
+        logger.info(f'Found {total_entries} entries in the Active Directory so far...')
 
         # Loop on the results
         for ad_user in ad_connection.entries:
-
             try:
+                if ad_user.sAMAccountName.value in processed_users:
+                    continue
 
                 if 'mail' not in ad_user.entry_attributes_as_dict:
                     continue
@@ -146,25 +101,21 @@ def import_ldap_users() -> dict:
 
                 # Check if the user already exists in the Silva database
                 user = find_user(ad_user.sAMAccountName.value)
-                # Initialize the is_new flag
                 is_new = True
 
                 # Check if the entry is a valid user
                 if not is_entry_a_valid_user(ad_user):
-                    # The entry is not a valid user
                     logger.info(f'User {ad_user.sAMAccountName.value} is not a valid user. Skipping...')
                     invalid += 1
                     continue
 
                 if user:
-                    # The user already exists in the Silva database
                     logger.info(f'User {ad_user.sAMAccountName.value} already exists in the database.')
                     is_new = False
                 else:
-                    # The user does not exist in the Silva database
                     user = SilvaUser()
 
-                # Create the user in the Silva database
+                # Create or update the user in the Silva database
                 user.username = ad_user.sAMAccountName.value
                 user.first_name = ad_user.givenName.value
                 user.last_name = ad_user.sn.value
@@ -176,35 +127,36 @@ def import_ldap_users() -> dict:
 
                 # Check if the user has a phone number
                 if 'telephoneNumber' in ad_user.entry_attributes_as_dict:
-                    # If so, set it
                     user.phone = ad_user.telephoneNumber.value
 
-                # Set a dummy default password (will not be used for authentication but is mandatory in the database)
+                # Set a dummy default password
                 user.set_password(f'silva_{ad_user.sAMAccountName.value}')
 
                 # Save the user
                 user.save()
 
+                # Add the processed user to the set
+                processed_users.add(ad_user.sAMAccountName.value)
+
                 if is_new:
-                    # Log the creation
                     logger.info(f'User {ad_user.sAMAccountName.value} created in the database.')
-                    # Increment the counter
                     counter += 1
                 else:
-                    # Log the update
                     logger.info(f'User {ad_user.sAMAccountName.value} updated in the database.')
-                    # Increment the counter
                     already_existing += 1
+
             except Exception as e:
-                # Log the error
                 logger.error(f'Error while importing user {ad_user.sAMAccountName}: {e}')
-                # Increment the error counter
                 errors += 1
 
         logger.info(f'{counter + already_existing} users processed so far...')
 
-        if len(ad_connection.entries) == 0:
-            go_on = False
+        # Handle pagination (get the cookie for the next page)
+        cookie = ad_connection.result['controls']['1.2.840.113556.1.4.319']['value'].get('cookie')
+
+        # Exit the loop when there are no more pages
+        if not cookie:
+            break
 
     logger.info(
         f'Imported {counter + already_existing} users with {errors} errors in {time.time() - start_time} seconds.')
