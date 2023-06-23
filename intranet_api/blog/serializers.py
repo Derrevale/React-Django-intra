@@ -1,16 +1,16 @@
-from .models import CategoryBlog
-from .models import ArticleBlog
-
 from rest_framework import serializers
 
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CategoryBlog
-        fields = '__all__'
+from .models import ArticleBlog
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    name = serializers.CharField(max_length=50)
+    slug = serializers.SlugField(max_length=50)
+    language = serializers.CharField(max_length=2)
+
+
+class ArticleSerializer(serializers.Serializer):
     class Meta:
         model = ArticleBlog
         fields = '__all__'

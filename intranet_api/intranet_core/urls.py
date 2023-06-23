@@ -15,8 +15,7 @@ from rest_framework_simplejwt.views import (
 import blog
 import documents.views
 import import_ad.views
-from blog.views import ArticlesViewSet
-from blog.views import CategoriesViewSet
+from blog.views import ArticlesViewSet, CategoryBlogAPIView, CategoryBlogDetailsAPIView
 from calendrier.views import CalendarysViewset
 from calendrier.views import EventViewset
 from documents.views import CategoryDocumentViewSet
@@ -48,7 +47,6 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 
-router.register('blog/categories', CategoriesViewSet)
 router.register('blog/articles', ArticlesViewSet)
 
 router.register('event/calendar', CalendarysViewset)
@@ -69,6 +67,10 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   # API
                   path('api/', include(router.urls)),
+
+                  # API custom endpoints...
+                  path('api/blog/categories/', CategoryBlogAPIView.as_view(), name='categories'),
+                  path('api/blog/categories/<int:cat_id>/', CategoryBlogDetailsAPIView.as_view(), name='categories'),
 
                   # Media
                   path('images/<str:path>', serve, {'document_root': settings.MEDIA_ROOT}),
