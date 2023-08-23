@@ -1,5 +1,5 @@
-import '../styles/Topbar.css';
-import '../styles/bootstrap.min.css';
+import '../../styles/Topbar.css';
+import '../../styles/bootstrap.min.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEnvelope} from "@fortawesome/free-solid-svg-icons";
 import {faFacebook, faYoutube, faLinkedin} from "@fortawesome/free-brands-svg-icons";

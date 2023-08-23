@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import Navbar from "./Navbar";
-import Topbar from "./Topbar";
+import Navbar from "./Navigation/Navbar";
+import Topbar from "./Navigation/Topbar";
 import { Button } from 'react-bootstrap';
-import OffcanvasRight from './OffcanvasRight';
+import OffcanvasRight from './Navigation/OffcanvasRight';
 
 import {
     createBrowserRouter,

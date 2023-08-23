@@ -1,49 +1,55 @@
-import React, {useState} from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { login } from '../../services/Api.js';
+import { InputGroup, FormControl, Button, Container, Row, Col } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; // Importer les icônes pour l'œil et l'œil barré
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try {
-            const response = await axios.post('http://localhost:8002/api/token/', {
-                username: username,
-                password: password
-            });
-
-            localStorage.setItem('access', response.data.access);
+        const result = await login(username, password);
+        if (result.success) {
             console.log("connecter");
-            localStorage.setItem('refresh', response.data.refresh);
-
-            axios.defaults.headers['Authorization'] = 'Bearer ' + localStorage.getItem('access');
-
-            // Redirect to the home page or dashboard
-            // history.push('/');
-        } catch (error) {
-            setError('Invalid username or password');
+        } else {
+            setError(result.error);
         }
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required/>
-                </label>
-                <label>
-                    Password:
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                </label>
-                <input type="submit" value="Login"/>
-            </form>
-            {error && <p>{error}</p>}
-        </div>
+        <Container className="mt-5">
+            <Row className="justify-content-center">
+                <Col md={4}>
+                    <h2>Login</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <label className="form-label">Username:</label>
+                            <FormControl type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Password:</label>
+                            <InputGroup>
+                                <FormControl
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} /> {/* Utiliser les icônes Font Awesome */}
+                                </Button>
+                            </InputGroup>
+                        </div>
+                        <Button type="submit" variant="primary">Login</Button>
+                    </form>
+                    {error && <p className="text-danger mt-3">{error}</p>}
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

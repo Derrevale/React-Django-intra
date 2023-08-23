@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/Navbar.css';
-import '../styles/bootstrap.min.css';
+import { Link } from 'react-router-dom'; // Importation du composant Link
+import '../../styles/Navbar.css';
+import '../../styles/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
@@ -34,7 +35,7 @@ function Navbar({ handleShow }) {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8002/api/EventManager Calendrier /')
+            .get('http://localhost:8002/api/event/calendar/')
             .then((response) => setCategories(response.data))
             .catch((error) => console.log(error));
     }, []);
@@ -47,7 +48,7 @@ function Navbar({ handleShow }) {
                         <div className="header_logo col-auto">
                             <div className="header_column">
                                 <div className="logo">
-                                    <a href="/">
+                                    <Link to="/">
                                         <img
                                             className="logo-image  ls-is-cached lazyloaded"
                                             data-srcset="https://intra.silva-medical.be/images/silva-intranet.png 1x"
@@ -57,7 +58,7 @@ function Navbar({ handleShow }) {
                                             srcSet="https://intra.silva-medical.be/images/silva-intranet.png 1x"
                                             src="src/components/Blog/ArticleList"
                                         ></img>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -66,23 +67,22 @@ function Navbar({ handleShow }) {
                                 <nav className="sp-megamenu-wrapper d-flex" role="navigation">
                                     <ul className="sp-megamenu-parent menu-animation-fade-up">
                                         <li className="sp-menu-item d-none d-lg-block">
-                                            <a href="/">
+                                            <Link to="/">
                                                 <FontAwesomeIcon icon={faHome}
                                                                  className="fa-facebook"></FontAwesomeIcon> Home
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="sp-menu-item d-none d-lg-block">
                                             <a onClick={toggleDropdown}>
                                                 <FontAwesomeIcon icon={faCalendar}
-                                                                 className="fa-facebook"></FontAwesomeIcon>{' '}
-                                                Garde
+                                                                 className="fa-facebook"></FontAwesomeIcon> Garde
                                             </a>
                                             {showDropdown && (
                                                 <div className="dropdown">
                                                     <ul>
                                                         {categories.map((category, index) => (
                                                             <li key={index}>
-                                                                <a href={`/calendrier/${category.id}`}>{category.name}</a>
+                                                                <Link to={`/calendrier/${category.id}`}>{category.name}</Link>
                                                             </li>
                                                         ))}
                                                     </ul>
@@ -90,10 +90,10 @@ function Navbar({ handleShow }) {
                                             )}
                                         </li>
                                         <li className="sp-menu-item d-none d-lg-block">
-                                            <a href="/Documents">
+                                            <Link to="/Documents">
                                                 <FontAwesomeIcon icon={faFile}
                                                                  className="fa-facebook"></FontAwesomeIcon> Documents
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="sp-menu-item d-none d-lg-block">
                                             <a href="https://silvamedic.lms.sapsf.eu/learning/user/personal/viewPersonalHome.do?OWASP_CSRFTOKEN=TYES-8K4D-BBIC-5MJF-NGI7-HOD8-DQYQ-Z6U0">
@@ -108,10 +108,10 @@ function Navbar({ handleShow }) {
                                             </a>
                                         </li>
                                         <li className="sp-menu-item d-none d-lg-block">
-                                            <a href="/Galerie">
+                                            <Link to="/Galerie">
                                                 <FontAwesomeIcon icon={faImages}
                                                                  className="fa-facebook"></FontAwesomeIcon> Galerie
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="sp-menu-item search-item d-none d-lg-block">
                                             <form className="center-align" onSubmit={handleSubmit}>
