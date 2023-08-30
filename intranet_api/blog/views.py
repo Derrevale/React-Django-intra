@@ -127,18 +127,21 @@ class ArticlesBlogDetailsAPIView(views.APIView):
         :param slug: the slug of the article.
         """
 
-        try:
-            article = ArticleBlog.objects.filter(slug=slug).first()
-        except ArticleBlog.DoesNotExist:
-            article = None
+        # Essayez de récupérer un article de ArticleBlog
+        article = ArticleBlog.objects.filter(slug=slug).first()
 
-        article = get_object_or_404(RootArticleBlog, slug=slug)
+        # Si aucun article n'est trouvé dans ArticleBlog, essayez RootArticleBlog
+        if article is None:
+            article = RootArticleBlog.objects.filter(slug=slug).first()
 
-        # Serialize the documents
+        # Si aucun article n'est trouvé dans les deux modèles, retournez une erreur 404
+        if article is None:
+            return Response({"detail": "Article not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the article
         serialized_article = ArticleSerializer(article).data
 
         return Response(serialized_article)
-
 
 class SearchBlogView(views.APIView):
     """

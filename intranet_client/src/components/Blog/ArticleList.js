@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import "../../styles/ArticleList.css";
+import "../../styles/bootstrap.min.css";
 
 function ArticleList() {
     const [articles, setArticles] = useState([]);
@@ -54,27 +55,27 @@ function ArticleList() {
           page {page} sur {totalPages}
         </span>
                 <div className="pagination-buttons">
-                    <button onClick={() => setPage(1)} disabled={page === 1}>
+                    <button className={`btn btn-outline-primary btn-rounded`} onClick={() => setPage(1)} disabled={page === 1}>
                         {"<<"}
                     </button>
-                    <button onClick={() => setPage(Math.max(1, page - 1))} disabled={page === 1}>
+                    <button  className={`btn btn-outline-primary btn-rounded`} onClick={() => setPage(Math.max(1, page - 1))} disabled={page === 1}>
                         {"<"}
                     </button>
                     {pages.map((number) => (
                         <button
                             key={number}
                             onClick={() => setPage(number)}
-                            className={number === page ? "active" : ""}
+                            className={`btn btn-primary btn-rounded ${number === page ? "active" : ""}`}
                             style={{display: number > totalPages ? "none" : "inline-block"}}
                         >
                             {number}
                         </button>
                     ))}
-                    <button onClick={() => setPage(Math.min(page + 1, totalPages))}
+                    <button className={`btn btn-outline-primary btn-rounded`} onClick={() => setPage(Math.min(page + 1, totalPages))}
                             disabled={page === totalPages || totalPages === 0}>
                         {">"}
                     </button>
-                    <button onClick={() => setPage(totalPages)} disabled={page === totalPages || totalPages === 0}>
+                    <button className={`btn btn-outline-primary btn-rounded`} onClick={() => setPage(totalPages)} disabled={page === totalPages || totalPages === 0}>
                         {">>"}
                     </button>
                 </div>

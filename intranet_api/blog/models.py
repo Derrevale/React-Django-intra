@@ -113,12 +113,17 @@ def _check_article_translations(root_article):
 
             if lang not in [article.language for article in articles]:
                 category = CategoryBlog.objects.filter(root_category=root_article.category, language=lang).first()
-                article = ArticleBlog(root_article=root_article, title=title_translations.get(lang),
-                                      intro=intro_translations.get(lang),
-                                      content=content_translations.get(lang),
-                                      slug=f'{lang}-{root_article.slug}',
-                                      language=lang, category=category,
-                                      publication_time=root_article.publication_time)
+                article = ArticleBlog(
+                    root_article=root_article,
+                    title=title_translations.get(lang),
+                    intro=intro_translations.get(lang),
+                    content=content_translations.get(lang),
+                    slug=f'{lang}-{root_article.slug}',
+                    language=lang,
+                    category=category,
+                    publication_time=root_article.publication_time,
+                    header_image=root_article.header_image
+                )
                 try:
                     article.save()
                 except Exception as e:
@@ -130,7 +135,7 @@ class RootArticleBlog(models.Model):
     title = models.CharField(max_length=150, null=False, blank=False, verbose_name='Title')
     slug = models.SlugField(null=True, blank=False, unique=True, verbose_name='Slug')
     # Image d'en-tête de l'article
-    header_image = models.ImageField(null=True, blank=True, upload_to="intranet_api/images/blog/")
+    header_image = models.ImageField(null=True, blank=True, upload_to="images/blog/")
     # Catégorie à laquelle appartient l'article
     category = models.ForeignKey(RootCategoryBlog, null=True, blank=False, on_delete=models.SET_NULL)
     # Introduction de l'article, utilisant le champ de texte riche de CKEditor

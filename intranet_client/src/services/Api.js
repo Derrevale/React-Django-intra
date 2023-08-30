@@ -28,7 +28,7 @@ export const login = async (username, password) => {
 export const fetchArticle = async (id) => {
     try {
         // Construire l'URL en utilisant l'ID et l'endpoint configuré dans Config.js
-        const response = await fetch(`${config.API_ENDPOINT}/Blog Article/${id}/`);
+        const response = await fetch(`${config.API_ENDPOINT}/blog/articles/${id}/`);
 
         // Convertir la réponse en JSON
         const data = await response.json();
