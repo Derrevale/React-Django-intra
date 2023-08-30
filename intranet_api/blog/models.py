@@ -130,7 +130,7 @@ class RootArticleBlog(models.Model):
     title = models.CharField(max_length=150, null=False, blank=False, verbose_name='Title')
     slug = models.SlugField(null=True, blank=False, unique=True, verbose_name='Slug')
     # Image d'en-tête de l'article
-    header_image = models.ImageField(null=True, blank=True, upload_to="images/blog/")
+    header_image = models.ImageField(null=True, blank=True, upload_to="intranet_api/images/blog/")
     # Catégorie à laquelle appartient l'article
     category = models.ForeignKey(RootCategoryBlog, null=True, blank=False, on_delete=models.SET_NULL)
     # Introduction de l'article, utilisant le champ de texte riche de CKEditor
@@ -165,7 +165,7 @@ class ArticleBlog(models.Model):
     title = models.CharField(max_length=150, null=False, blank=False, verbose_name='Title')
     slug = models.SlugField(null=True, blank=False, unique=True, verbose_name='Slug')
     # Image d'en-tête de l'article
-    header_image = models.ImageField(null=True, blank=True, upload_to="images/blog/")
+    header_image = models.ImageField(null=True, blank=True, upload_to="intranet_api/images/blog/")
     # Catégorie à laquelle appartient l'article
     category = models.ForeignKey(CategoryBlog, null=True, blank=False, on_delete=models.SET_NULL)
     # Introduction de l'article, utilisant le champ de texte riche de CKEditor

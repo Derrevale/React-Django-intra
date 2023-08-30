@@ -86,6 +86,7 @@ class ArticlesBlogListAPIView(views.APIView):
     """
     ArticleBlog API View.
     """
+    pagination_class = BlogArticlePagination
 
     @staticmethod
     def get(request):
@@ -99,11 +100,18 @@ class ArticlesBlogListAPIView(views.APIView):
         art_ids = [art.root_article.id for art in articles]
         _root_articles = RootArticleBlog.objects.all()
         root_articles = [art for art in _root_articles if art.id not in art_ids]
-        # Serialize the documents
-        serialized_articles = ArticleSerializer(articles, many=True).data
-        serialized_articles += ArticleSerializer(root_articles, many=True).data
 
-        return Response(serialized_articles)
+        # Combine the articles
+        combined_articles = list(articles) + list(root_articles)
+
+        # Apply pagination
+        paginator = BlogArticlePagination()
+        paginated_articles = paginator.paginate_queryset(combined_articles, request)
+
+        # Serialize the documents
+        serialized_articles = ArticleSerializer(paginated_articles, many=True).data
+
+        return paginator.get_paginated_response(serialized_articles)
 
 
 class ArticlesBlogDetailsAPIView(views.APIView):

@@ -25,4 +25,33 @@ export const login = async (username, password) => {
     }
 };
 
+export const fetchArticle = async (id) => {
+    try {
+        // Construire l'URL en utilisant l'ID et l'endpoint configuré dans Config.js
+        const response = await fetch(`${config.API_ENDPOINT}/Blog Article/${id}/`);
+
+        // Convertir la réponse en JSON
+        const data = await response.json();
+
+        // Retourner l'article et un indicateur de succès
+        return { success: true, article: data };
+    } catch (error) {
+        // Gérer les erreurs en les loguant et en retournant un indicateur d'échec
+        console.log(error);
+        return { success: false, error };
+    }
+};
+
+// Fonction pour récupérer la liste des articles du blog
+export const fetchBlogArticles = async () => {
+    try {
+        const response = await fetch('http://localhost:8002/api/blog/articles/');
+        const data = await response.json();
+        return { success: true, articles: data };
+    } catch (error) {
+        console.log(error);
+        return { success: false, error };
+    }
+};
+
 
