@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navigation/Navbar";
 import Topbar from "./Navigation/Topbar";
+import { LanguageProvider } from '../services/LanguageContext'; // Ajustez ce chemin en fonction de l'emplacement de votre LanguageProvider
 import { Button } from 'react-bootstrap';
 import OffcanvasRight from './Navigation/OffcanvasRight';
 
@@ -13,6 +14,7 @@ import {
     RouterProvider,
     useParams
 } from "react-router-dom";
+
 import ArticleList from "./Blog/ArticleList";
 import Article from "./Blog/Article";
 
@@ -38,46 +40,46 @@ function App() {
 
     const router = createBrowserRouter(
         createRoutesFromElements(
-            <Route path="/" element={<Root handleShow={handleShow}/>}>
-                <Route index element={<ArticleList/>}/>
-                <Route path="/calendrier/:id" element={<CalendarEvent/>}/>
+            <Route path="/" element={<Root handleShow={handleShow} />}>
+                <Route index element={<ArticleList />} />
+                <Route path="/calendrier/:id" element={<CalendarEvent />} />
 
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/eventform" element={<AddEventForm/>}/>
-                <Route path="/fileimport" element={<FileImports/>}/>
-                <Route path="/search" element={<SearchResult/>}/>
+                <Route path="/login" element={<Login />} />
+                <Route path="/eventform" element={<AddEventForm />} />
+                <Route path="/fileimport" element={<FileImports />} />
+                <Route path="/search" element={<SearchResult />} />
 
-                <Route path="/articlelist" element={<ArticleList/>}/>
-                <Route path="/articles/:id" element={<Article/>}/>
+                <Route path="/articlelist" element={<ArticleList />} />
+                <Route path="/articles/:id" element={<Article />} />
 
-                <Route path="/documents" element={<Documents/>}/>
+                <Route path="/documents" element={<Documents />} />
 
-                <Route path="/Galerie" element={<CategoryList/>}/>
-                <Route path="/Galerie/:categoryId" element={<CategoryDetail/>}/>
+                <Route path="/Galerie" element={<CategoryList />} />
+                <Route path="/Galerie/:categoryId" element={<CategoryDetail />} />
             </Route>
         )
     );
 
-
     return (
-        <div className="App">
-            <Topbar/>
-
-            <OffcanvasRight show={showOffcanvas} handleClose={handleClose} />
-
-            <RouterProvider router={router}/>
-        </div>
+        <LanguageProvider>
+            <div className="App">
+                <Topbar />
+                <OffcanvasRight show={showOffcanvas} handleClose={handleClose} />
+                <RouterProvider router={router} />
+            </div>
+        </LanguageProvider>
     );
 }
 
-const Root = ({handleShow}) => {
+const Root = ({ handleShow }) => {
     return (
         <>
-            <Navbar handleShow={handleShow}/>
+            <Navbar handleShow={handleShow} />
             <div className="container">
-                <Outlet/>
+                <Outlet />
             </div>
         </>
-    )
-}
-export default App
+    );
+};
+
+export default App;

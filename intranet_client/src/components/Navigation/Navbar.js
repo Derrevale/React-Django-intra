@@ -79,7 +79,7 @@ function Navbar({ handleShow }) {
                                             <Dropdown className="fixed-position">
                                                 <Dropdown.Toggle variant="link" id="dropdown-basic">
                                                     <FontAwesomeIcon icon={faCalendar}
-                                                                     className="fa-facebook"/> Planning
+                                                                     className="fa-facebook"/> Garde
                                                 </Dropdown.Toggle>
 
                                                 <Dropdown.Menu className="fixed-dropdown">
